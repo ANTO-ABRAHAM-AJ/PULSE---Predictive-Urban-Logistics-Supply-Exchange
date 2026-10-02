@@ -1,0 +1,20 @@
+services: [mobility, food]
+partner_types: [two_wheeler, four_wheeler]
+
+# Which partner type may serve which service.
+eligibility:
+  two_wheeler:  {mobility: true,  food: true}
+  four_wheeler: {mobility: true,  food: false}
+
+# Jobs one partner completes per planning period (1 hour).
+jobs_per_partner_per_period:
+  mobility: 2
+  food: 3
+
+# Repositioning is allowed only within this distance (proxy for tau).
+max_reposition_km: 4.0
+
+# Minimum fraction of demand that must be served (0 = no hard floor).
+min_service_level:
+  mobility: 0.0
+  food: 0.0

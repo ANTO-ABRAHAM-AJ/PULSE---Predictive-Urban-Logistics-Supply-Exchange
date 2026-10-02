@@ -1,0 +1,21 @@
+# Hand-crafted lunch-hour instance with an obvious intended answer:
+#   - Zone A (office) has a large food shortage.
+#   - Zone B (residential) has surplus two-wheelers, 2 km from A.
+#   - Expected: surplus B two-wheelers move to A for food;
+#     four-wheelers never serve food; Zone E is too far to receive help.
+
+period: "Weekday 12:00-13:00"
+
+supply:          # available partners at start of period
+  A: {two_wheeler: 2,  four_wheeler: 3}
+  B: {two_wheeler: 12, four_wheeler: 4}
+  C: {two_wheeler: 4,  four_wheeler: 3}
+  D: {two_wheeler: 5,  four_wheeler: 2}
+  E: {two_wheeler: 2,  four_wheeler: 2}
+
+demand:          # forecast jobs this period
+  A: {mobility: 6, food: 30}
+  B: {mobility: 4, food: 3}
+  C: {mobility: 8, food: 9}
+  D: {mobility: 4, food: 15}
+  E: {mobility: 4, food: 12}

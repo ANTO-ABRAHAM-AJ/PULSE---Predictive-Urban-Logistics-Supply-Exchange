@@ -1,0 +1,16 @@
+# City geometry for the TOY instance (5 zones).
+# Replaced by the real synthetic city in Stage 5.
+
+zones:
+  A: {type: office}
+  B: {type: residential}
+  C: {type: mixed}
+  D: {type: restaurant_cluster}
+  E: {type: suburb}
+
+# Symmetric road distances in km (upper triangle; the loader mirrors them).
+distance_km:
+  A: {B: 2.0, C: 3.0, D: 2.5, E: 9.0}
+  B: {C: 3.5, D: 4.0, E: 7.0}
+  C: {D: 2.0, E: 6.0}
+  D: {E: 8.0}

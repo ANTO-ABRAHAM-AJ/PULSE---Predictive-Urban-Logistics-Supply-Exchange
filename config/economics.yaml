@@ -1,0 +1,16 @@
+# All money in INR. Toy values - to be calibrated in Stage 5.
+
+# Contribution earned per completed unit (after partner payout).
+contribution_per_unit:
+  mobility: 60
+  food: 40
+
+# Penalty per unit of unserved demand (lost goodwill / future demand).
+unserved_penalty_per_unit:
+  mobility: 30
+  food: 25
+
+# Repositioning cost per km moved, by partner type.
+reposition_cost_per_km:
+  two_wheeler: 5
+  four_wheeler: 10
