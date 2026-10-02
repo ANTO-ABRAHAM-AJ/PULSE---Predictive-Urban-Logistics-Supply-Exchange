@@ -45,8 +45,10 @@ airport isolation).
 shift hours, before any repositioning or dispatch. It is what Phase 9
 forecasts and what Phase 10 decides how to move.
 
-**Fleet sizing.** `partners_at_scale_1 × city_scale` (650 at the default 0.5),
-chosen so the city as a whole is roughly balanced at dinner. Shortages are
+**Fleet sizing.** `partners_at_scale_1 × city_scale` (850 at the default 0.5).
+The first sizing (650) was based on the planning ratio alone; the event
+simulation showed travel and idle time make effective capacity lower, so the
+fleet was raised. The city as a whole has enough partners at dinner. Shortages are
 mostly spatial: at weekday lunch, office zones need several times more
 partners than live there while residential zones have a surplus.
 
@@ -56,7 +58,27 @@ lunch mismatch, and citywide dinner balance.
 
 **Run:** `python scripts/generate_supply.py` (after `generate_demand.py`)
 
-## Stage 5b (part 2) — Event-level operations (next)
+## Stage 5b (part 2) — Event-level operations (built)
 
-Individual rides and orders with timestamps, destinations, fares, prep times,
-assignments, pickup ETAs, cancellations and payouts.
+| Piece | Code | Config | Assumptions |
+|-------|------|--------|-------------|
+| Rides: destination, distance, dispatch, ETA, outcome, fare, payout | `generation/events.py` | `config/bengaluru/operations.yaml` | O-03 … O-07, E-01, E-03 |
+| Food orders: restaurant zone, prep, just-in-time dispatch, outcome, value, payout | `generation/events.py` | `config/bengaluru/operations.yaml` | O-02 … O-06, E-02, E-03 |
+| Partner-hours: location at hour start, busy minutes, empty km | `generation/events.py` | — | S-05 |
+
+**The status-quo policy.** History is generated with naive dispatch: the
+earliest-arriving free eligible partner within 8 km, no repositioning. This is
+the "before PULSE" world the warehouse and analytics describe.
+
+**Results at default settings (112 days):** 477k rides (≈72% completed),
+621k food orders (≈94% delivered), ≈47% partner utilization. Partners sit idle
+in residential zones while office-zone evening rides fail — the spatial
+mismatch PULSE is built to fix.
+
+**Validation.** `tests/test_events.py` checks one event per demand unit,
+timestamp ordering, eligibility, no double-booking (including across
+midnight), cancelled jobs without partners, sane economics, plausible
+completion rates, busy ≤ online time, the office evening failure, and idle
+supply coexisting with cancellations.
+
+**Run:** `python scripts/generate_events.py` (after demand and supply; ~2–4 min)

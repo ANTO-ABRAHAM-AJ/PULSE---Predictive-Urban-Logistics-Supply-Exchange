@@ -78,10 +78,10 @@ def test_office_lunch_is_badly_undersupplied_at_home(world):
     assert mpi["residential"] < 1
 
 
-def test_citywide_supply_is_tight_but_not_absurd_at_dinner(world):
-    """City as a whole is roughly balanced at dinner: shortages are mostly about
-    WHERE supply is, not how much exists."""
+def test_citywide_supply_is_not_the_main_problem_at_dinner(world):
+    """City as a whole has roughly enough partners at dinner (planning ratio
+    O-01): shortages are mostly about WHERE supply is, not how much exists."""
     calendar, demand, _, _, supply, ztype = world
     m = pressure(demand, supply, calendar, ztype)
     d = m[~m["is_weekend"] & m["hour"].isin([19, 20])]
-    assert 0.8 < d["needed"].sum() / d["online_partners"].sum() < 1.3
+    assert 0.6 < d["needed"].sum() / d["online_partners"].sum() < 1.1

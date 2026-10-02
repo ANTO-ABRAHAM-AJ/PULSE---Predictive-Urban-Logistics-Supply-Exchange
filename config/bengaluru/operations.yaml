@@ -1,0 +1,41 @@
+# Event-level operations rules (Assumptions O-01 ... O-04, E-01 ... E-03).
+# All values illustrative; calibrated before Phase 5.
+
+seed: 7777
+
+dispatch:                       # status-quo policy: nearest free eligible partner, no repositioning
+  max_pickup_km: 8.0            # partners further than this are not considered
+  max_wait_min:                 # no partner can arrive within this -> cancelled_no_partner
+    mobility: 20
+    food: 20                    # measured from when the food is ready
+  intra_zone_km: [1.5, 3.5]     # trips inside one zone: uniform km range
+
+customer_cancel:                # O-04: probability rises with waiting time (logistic)
+  mobility: {max_prob: 0.35, midpoint_min: 12, scale_min: 2.5}
+  food:     {max_prob: 0.25, midpoint_min: 50, scale_min: 6.0}   # on total delivery time
+restaurant_reject_prob: 0.03
+
+prep_time_min: {offpeak: [10, 25], peak: [15, 32]}   # O-02; peak = 12-14 and 19-22
+food_peak_hours: [12, 13, 19, 20, 21]
+
+# Mobility destinations: attraction by zone type and time band, x exp(-km / decay)
+destination:
+  decay_km: 5
+  bands:
+    morning: {hours: [6, 7, 8, 9, 10],  weights: {office: 3.0, transit_hub: 1.5, restaurant_cluster: 1.0, mixed: 1.0, residential: 0.5}}
+    evening: {hours: [16, 17, 18, 19, 20], weights: {residential: 3.0, mixed: 1.5, restaurant_cluster: 1.2, transit_hub: 1.0, office: 0.3}}
+    other:   {weights: {restaurant_cluster: 2.0, residential: 1.5, mixed: 1.0, transit_hub: 1.0, office: 0.5}}
+
+food:
+  same_zone_restaurant_prob: 0.70   # otherwise nearest restaurant cluster within reach
+  restaurant_cluster_reach_km: 7.0
+  order_value_lognormal: {median: 350, sigma: 0.5}
+
+economics:                      # E-01 ... E-03 (INR)
+  fare:
+    two_wheeler:  {base: 25, per_km: 9}
+    four_wheeler: {base: 60, per_km: 18}
+  ride_payout_share: 0.80       # partner keeps 80% of the fare
+  food_commission: 0.20
+  delivery_fee: 30
+  food_payout: {base: 25, per_km: 6}   # per km of pickup + delivery

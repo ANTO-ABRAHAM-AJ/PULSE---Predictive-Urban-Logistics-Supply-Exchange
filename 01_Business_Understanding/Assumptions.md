@@ -1,6 +1,6 @@
 # PULSE — Assumptions Log
 
-**Status:** v0.2 — written before the data generator (Stage 5). Every rule the
+**Status:** v0.3 — written before the data generator (Stage 5). Every rule the
 synthetic city follows is listed here. Numeric values live in `config/`;
 this file explains *why* each value exists and where it is used.
 
@@ -75,7 +75,7 @@ Expected demand per **Zone × Hour × Service** =
 |----|-----------|
 | S-01 | Partners have a **home zone**, weighted toward residential and peripheral zones. Supply starts where partners live, not where demand is — this creates the repositioning problem. |
 | S-02 | Partners work **shifts**: morning, lunch–dinner split, evening, or full day, with daily log-in probability < 1. |
-| S-03 | Fleet mix: roughly **70% two-wheelers / 30% four-wheelers** (*illustrative*). |
+| S-03 | Fleet: **850 partners** at the default scale, roughly **70% two-wheelers / 30% four-wheelers** (*illustrative*). Sized so the city has roughly enough partners overall; shortages come from location and timing. |
 | S-04 | Rain reduces two-wheeler log-ins (see D-08); four-wheeler supply is unaffected. |
 | S-05 | Partner states: `offline`, `available`, `assigned`, `on_trip`, `delivering`, `repositioning`. Idle = available with no job. |
 
@@ -83,10 +83,13 @@ Expected demand per **Zone × Hour × Service** =
 
 | ID | Assumption |
 |----|-----------|
-| O-01 | Planning capacity: one partner completes **2 rides** or **3 deliveries** per hour (carried from the toy model). The event-level simulation uses actual trip durations; this ratio is the planning approximation. |
+| O-01 | Planning capacity: one partner completes **2 rides** or **3 deliveries** per hour. The event simulation uses real trip durations; it measured ~27 busy minutes per ride and ~17 per delivery, which is consistent with this ratio at full utilization. |
 | O-02 | Restaurant prep time: 10–30 minutes, longer at peak. |
 | O-03 | Pickup ETA = pickup distance ÷ hour-specific speed (C-05). |
-| O-04 | Cancellation probability rises with waiting time (logistic curve); unassigned requests cancel after **10 minutes** (mobility) or **15 minutes** (food). |
+| O-04 | If no partner can arrive within **20 minutes** of a ride request, or within **20 minutes** of food being ready, the job is cancelled (`no partner`). Otherwise the customer may still cancel, with probability rising with waiting time (logistic curve). Restaurants reject 3% of orders. |
+| O-05 | **Status-quo dispatch** (what history contains): each job goes to the free, online, eligible partner who can arrive earliest, within 8 km; no repositioning. Food partners are dispatched just-in-time to reach the restaurant around ready time. |
+| O-06 | Partners start each day in their home zone, end each job where it ends, and a job running past midnight keeps them busy into the next day. |
+| O-07 | Ride destinations follow time-of-day attraction by zone type (offices in the morning, homes in the evening) with distance decay (5 km). |
 
 ## 7. Economics (all INR, *illustrative*, calibrated in Stage 5)
 

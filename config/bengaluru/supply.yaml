@@ -1,7 +1,7 @@
 # Supply-generation rules (Assumptions S-01 ... S-05). All values illustrative.
 
 fleet:
-  partners_at_scale_1: 1300     # multiplied by city_scale in demand.yaml, so supply
+  partners_at_scale_1: 1700     # multiplied by city_scale in demand.yaml, so supply
                                 # and demand always scale together
   vehicle_mix: {two_wheeler: 0.70, four_wheeler: 0.30}          # S-03
   eligibility:
