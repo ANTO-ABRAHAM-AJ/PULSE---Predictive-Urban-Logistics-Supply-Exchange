@@ -46,6 +46,7 @@ class AllocationResult:
     served: dict = field(default_factory=dict)            # (zone, service) -> units
     unserved: dict = field(default_factory=dict)          # (zone, service) -> units
     components: dict = field(default_factory=dict)        # objective breakdown
+    supply_duals: dict = field(default_factory=dict)      # (zone, partner_type) -> INR per extra partner
     message: str = ""
 
     @property
@@ -85,9 +86,10 @@ def solve_allocation(inst: dict) -> AllocationResult:
             u[j, s] = solver.NumVar(0.0, max(cap, 0.0), f"u_{j}_{s}")
 
     # Supply constraints
+    supply_con = {}
     for i in Z:
         for k in K:
-            solver.Add(
+            supply_con[i, k] = solver.Add(
                 sum(v for (a, b, kk, ss), v in x.items() if a == i and kk == k) <= supply[i][k],
                 f"supply_{i}_{k}",
             )
@@ -131,6 +133,10 @@ def solve_allocation(inst: dict) -> AllocationResult:
                                - components["reposition_cost"]
                                - components["unserved_penalty"])
 
+    # Shadow price of each supply constraint: the objective gain from one
+    # more partner of type k starting in zone i (valid for small changes).
+    supply_duals = {key: con.dual_value() for key, con in supply_con.items()}
+
     return AllocationResult(status=status, objective=solver.Objective().Value(),
                             flows=flows, served=served, unserved=unserved,
-                            components=components)
+                            components=components, supply_duals=supply_duals)
