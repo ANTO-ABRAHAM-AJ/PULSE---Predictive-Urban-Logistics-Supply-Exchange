@@ -1,6 +1,6 @@
 # PULSE — Assumptions Log
 
-**Status:** v0.4 — written before the data generator (Stage 5). Every rule the
+**Status:** v0.5 — written before the data generator (Stage 5). Every rule the
 synthetic city follows is listed here. Numeric values live in `config/`;
 this file explains *why* each value exists and where it is used.
 
@@ -33,6 +33,8 @@ this file explains *why* each value exists and where it is used.
 | C-05 | Average speed depends on hour: **15 km/h** at peak (8–11, 17–21 weekdays), **25 km/h** otherwise (*illustrative*). | Bengaluru peak congestion matters for ETAs and repositioning reach. |
 | C-06 | Repositioning is allowed only if travel time ≤ **20 minutes** (τ), so reach shrinks at peak. | Replaces the toy's fixed 4 km limit with a time-based rule. |
 | C-07 | Kempegowda Airport is beyond repositioning reach of every other zone, so its supply must come from partners already there or incentives. | Real-city equivalent of the toy's isolated Zone E; a deliberate bottleneck for Phase 10B/11. |
+| C-08 | **Restaurants**: 1,035 across zones (120 per restaurant cluster down to 10 per transit hub), each with a cuisine and a lognormal popularity, so a few restaurants take most orders. | Needed for `Dim_Restaurant`; restaurant concentration drives food pressure. |
+| C-09 | **Customers**: ~60,000, split across zones by demand; lognormal activity, so a minority of customers generate most rides and orders. | Needed for `Dim_Customer`; realistic repeat behaviour. |
 
 Zone list (24 zones; ids and approximate centroids in `config/bengaluru/zones.yaml`):
 

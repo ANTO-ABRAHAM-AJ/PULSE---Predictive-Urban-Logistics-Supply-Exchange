@@ -82,3 +82,11 @@ completion rates, busy ≤ online time, the office evening failure, and idle
 supply coexisting with cancellations.
 
 **Run:** `python scripts/generate_events.py` (after demand and supply; ~2–4 min)
+
+## Stage 5c — Customers and restaurants (built)
+
+`generation/entities.py` (config `config/bengaluru/entities.yaml`, assumptions
+C-08, C-09) creates restaurants and customers and attaches `customer_id` to every
+ride and order and `restaurant_id` to every order, picking from the right zone.
+
+**Run everything in order:** `python scripts/build_all.py`

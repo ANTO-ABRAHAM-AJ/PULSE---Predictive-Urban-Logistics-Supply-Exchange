@@ -3,6 +3,7 @@
     1. generate_demand.py   zones, distances, calendar, hourly demand
     2. generate_supply.py   partner fleet and baseline supply
     3. generate_events.py   every ride and food order (takes 1-4 minutes)
+    4. generate_entities.py customers and restaurants attached to events
 
 Usage:
     python scripts/build_all.py
@@ -13,7 +14,8 @@ import time
 from pathlib import Path
 
 SCRIPTS = Path(__file__).resolve().parent
-STEPS = ["generate_demand.py", "generate_supply.py", "generate_events.py"]
+STEPS = ["generate_demand.py", "generate_supply.py", "generate_events.py",
+         "generate_entities.py"]
 
 
 def main() -> None:

@@ -1,0 +1,7 @@
+# SQL Server connection for the PULSE warehouse (local development).
+server: localhost
+database: PULSE_DW
+driver: ODBC Driver 18 for SQL Server
+trusted_connection: true          # Windows Authentication
+trust_server_certificate: true    # local self-signed certificate (same as sqlcmd -C)
+batch_size: 50000

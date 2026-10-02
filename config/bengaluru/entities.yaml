@@ -1,0 +1,14 @@
+# Customers and restaurants (added for Dim_Customer / Dim_Restaurant). Illustrative.
+seed: 9090
+
+restaurants_per_zone:          # by zone type
+  restaurant_cluster: 120
+  office: 35
+  mixed: 40
+  residential: 30
+  transit_hub: 10
+cuisines: [South Indian, North Indian, Biryani, Chinese, Fast Food, Cafe, Desserts, Healthy]
+restaurant_popularity_sigma: 1.0      # lognormal: a few restaurants get many orders
+
+customers_total: 60000         # split across zones in proportion to their demand
+customer_activity_sigma: 1.0   # lognormal: a few customers order/ride very often

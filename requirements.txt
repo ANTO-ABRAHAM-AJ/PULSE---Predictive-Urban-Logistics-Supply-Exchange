@@ -4,9 +4,9 @@ pyyaml>=6.0
 numpy>=1.26
 pandas>=2.1
 pytest>=8.0
+pyodbc>=5.2        # SQL Server warehouse (Phase 4)
 
 # Added when their stage starts
 # geopandas      # Stage 7 - geospatial analytics
 # statsmodels    # Stage 8 - forecasting
 # scipy          # Stage 8 - statistical analysis
-# pyodbc         # Stage 6 - SQL Server connection

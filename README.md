@@ -18,7 +18,8 @@ go, when, and for which service — and whether it is economically justified.
 | 3 | Naive baseline + independent evaluator: optimizer wins 99% of demand draws | ✅ |
 | 4 | Shadow prices verified by re-solving; bottleneck ranking | ✅ |
 | 5 | Synthetic Bengaluru: 24 zones, 16 weeks, 850 partners, 1.1M rides and orders | ✅ |
-| Phase 4 | SQL Server data warehouse (star schema) | Next |
+| Phase 4 | SQL Server data warehouse: 15-table star schema, loader, quality checks | ✅ |
+| Phase 5 | Marketplace performance analytics (T-SQL KPI views) | Next |
 
 ## Key findings so far (synthetic data, status-quo dispatch)
 
@@ -50,11 +51,12 @@ Data generation: `03_Data_Engineering/Data_Generation_Framework.md`
 ```bash
 pip install -r requirements-lock.txt   # exact tested versions (or requirements.txt)
 pip install -e .
-pytest                                 # 55 tests
+pytest                                 # 64 tests
 python scripts/run_toy.py              # toy optimizer
 python scripts/compare_policies.py     # optimizer vs baseline
 python scripts/bottlenecks.py          # marginal value of supply
 python scripts/build_all.py            # rebuild all Bengaluru data (~2-4 min)
+python scripts/load_warehouse.py       # load SQL Server warehouse PULSE_DW
 ```
 
 Tested on Python 3.14.
