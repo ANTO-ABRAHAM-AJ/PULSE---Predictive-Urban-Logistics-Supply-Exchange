@@ -1,0 +1,37 @@
+# Bengaluru operating zones (Assumptions C-01, C-02).
+# lat/lon are APPROXIMATE locality centroids, good to ~1 km. They drive
+# distances and travel times. Real boundary polygons replace them for the
+# maps in Phase 6-7 (Assumption C-03).
+
+zones:
+  WHF: {name: Whitefield,            type: office,             lat: 12.9698, lon: 77.7500}
+  MAN: {name: Manyata Tech Park,     type: office,             lat: 13.0475, lon: 77.6200}
+  ECY: {name: Electronic City,       type: office,             lat: 12.8452, lon: 77.6602}
+  BEL: {name: Bellandur-ORR,         type: office,             lat: 12.9260, lon: 77.6762}
+  CBD: {name: CBD (MG Road),         type: office,             lat: 12.9756, lon: 77.6066}
+  KOR: {name: Koramangala,           type: restaurant_cluster, lat: 12.9352, lon: 77.6245}
+  IND: {name: Indiranagar,           type: restaurant_cluster, lat: 12.9784, lon: 77.6408}
+  HSR: {name: HSR Layout,            type: restaurant_cluster, lat: 12.9116, lon: 77.6474}
+  JAY: {name: Jayanagar,             type: residential,        lat: 12.9250, lon: 77.5938}
+  JPN: {name: JP Nagar,              type: residential,        lat: 12.9063, lon: 77.5857}
+  BSK: {name: Banashankari,          type: residential,        lat: 12.9255, lon: 77.5468}
+  RAJ: {name: Rajajinagar,           type: residential,        lat: 12.9910, lon: 77.5525}
+  MLM: {name: Malleshwaram,          type: residential,        lat: 13.0035, lon: 77.5709}
+  YEL: {name: Yelahanka,             type: residential,        lat: 13.1007, lon: 77.5963}
+  BTM: {name: BTM Layout,            type: residential,        lat: 12.9166, lon: 77.6101}
+  BVG: {name: Basavanagudi,          type: residential,        lat: 12.9406, lon: 77.5738}
+  MAR: {name: Marathahalli,          type: mixed,              lat: 12.9569, lon: 77.7011}
+  HEB: {name: Hebbal,                type: mixed,              lat: 13.0358, lon: 77.5970}
+  SAR: {name: Sarjapur Road,         type: mixed,              lat: 12.9010, lon: 77.6870}
+  KRP: {name: KR Puram,              type: mixed,              lat: 13.0076, lon: 77.6955}
+  YPR: {name: Yeshwanthpur,          type: mixed,              lat: 13.0285, lon: 77.5400}
+  BGR: {name: Bannerghatta Road,     type: mixed,              lat: 12.8880, lon: 77.5970}
+  MAJ: {name: Majestic,              type: transit_hub,        lat: 12.9767, lon: 77.5713}
+  KIA: {name: Kempegowda Airport,    type: transit_hub,        lat: 13.1986, lon: 77.7066}
+
+travel:
+  detour_factor: 1.4          # C-04
+  peak_speed_kmh: 15          # C-05
+  offpeak_speed_kmh: 25       # C-05
+  weekday_peak_hours: [8, 9, 10, 17, 18, 19, 20]
+  max_reposition_minutes: 20  # C-06

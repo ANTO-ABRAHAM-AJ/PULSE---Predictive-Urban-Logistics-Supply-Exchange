@@ -1,6 +1,6 @@
 # PULSE — Assumptions Log
 
-**Status:** v0.1 — written before the data generator (Stage 5). Every rule the
+**Status:** v0.2 — written before the data generator (Stage 5). Every rule the
 synthetic city follows is listed here. Numeric values live in `config/`;
 this file explains *why* each value exists and where it is used.
 
@@ -31,8 +31,9 @@ this file explains *why* each value exists and where it is used.
 | C-04 | Road distance = straight-line distance between zone centroids × **1.4** detour factor (*illustrative*). | Simple, transparent proxy without a routing engine. |
 | C-05 | Average speed depends on hour: **15 km/h** at peak (8–11, 17–21 weekdays), **25 km/h** otherwise (*illustrative*). | Bengaluru peak congestion matters for ETAs and repositioning reach. |
 | C-06 | Repositioning is allowed only if travel time ≤ **20 minutes** (τ), so reach shrinks at peak. | Replaces the toy's fixed 4 km limit with a time-based rule. |
+| C-07 | Kempegowda Airport is beyond repositioning reach of every other zone, so its supply must come from partners already there or incentives. | Real-city equivalent of the toy's isolated Zone E; a deliberate bottleneck for Phase 10B/11. |
 
-Initial zone list (types to be confirmed in Stage 5):
+Zone list (24 zones; ids and approximate centroids in `config/bengaluru/zones.yaml`):
 
 | Type | Zones |
 |------|-------|
@@ -40,7 +41,7 @@ Initial zone list (types to be confirmed in Stage 5):
 | restaurant_cluster | Koramangala, Indiranagar, HSR Layout |
 | residential | Jayanagar, JP Nagar, Banashankari, Rajajinagar, Malleshwaram, Yelahanka, BTM Layout, Basavanagudi |
 | mixed | Marathahalli, Hebbal, Sarjapur Road, KR Puram, Yeshwanthpur, Bannerghatta Road |
-| transit_hub | Majestic (KSR / Kempegowda Bus Station), Airport Road (Hebbal–Yelahanka corridor) |
+| transit_hub | Majestic (KSR / Kempegowda Bus Station), Kempegowda Airport (KIA) |
 
 ## 3. Time
 
