@@ -33,7 +33,30 @@ airport isolation).
 
 **Run:** `python scripts/generate_demand.py`
 
-## Stage 5b — Supply and event-level operations (next)
+## Stage 5b (part 1) — Partner fleet and baseline supply (built)
 
-Partners, shifts, home zones, request/order events, assignments,
-cancellations, fares and payouts.
+| Piece | Code | Config | Assumptions |
+|-------|------|--------|-------------|
+| Partners: vehicle, home zone, shift, eligibility | `generation/supply.py` | `config/bengaluru/supply.yaml` | M-02, S-01 … S-03 |
+| Daily log-ins (weekday/weekend, rain) | `generation/supply.py` | `config/bengaluru/supply.yaml` | S-02, S-04 |
+| Baseline online partners per Date × Hour × Zone × Vehicle | `generation/supply.py` | — | S-01, S-05 |
+
+**Baseline supply** means partners counted in their *home* zone during their
+shift hours, before any repositioning or dispatch. It is what Phase 9
+forecasts and what Phase 10 decides how to move.
+
+**Fleet sizing.** `partners_at_scale_1 × city_scale` (650 at the default 0.5),
+chosen so the city as a whole is roughly balanced at dinner. Shortages are
+mostly spatial: at weekday lunch, office zones need several times more
+partners than live there while residential zones have a surplus.
+
+**Validation.** `tests/test_supply.py` checks fleet mix, eligibility, home-zone
+distribution, 24-hour coverage, rain effect on two-wheelers only, the office
+lunch mismatch, and citywide dinner balance.
+
+**Run:** `python scripts/generate_supply.py` (after `generate_demand.py`)
+
+## Stage 5b (part 2) — Event-level operations (next)
+
+Individual rides and orders with timestamps, destinations, fares, prep times,
+assignments, pickup ETAs, cancellations and payouts.

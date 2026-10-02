@@ -1,0 +1,33 @@
+# Supply-generation rules (Assumptions S-01 ... S-05). All values illustrative.
+
+fleet:
+  partners_at_scale_1: 1300     # multiplied by city_scale in demand.yaml, so supply
+                                # and demand always scale together
+  vehicle_mix: {two_wheeler: 0.70, four_wheeler: 0.30}          # S-03
+  eligibility:
+    two_wheeler:  [mobility, food]                                # M-02
+    four_wheeler: [mobility]
+  seed: 4242
+
+# Where partners live (S-01): relative weight per zone type.
+home_zone_weight:
+  residential: 3.0
+  mixed: 2.0
+  restaurant_cluster: 1.0
+  transit_hub: 0.5
+  office: 0.3
+
+# Shift patterns (S-02). Each window is [start_hour, end_hour), end exclusive.
+shifts:
+  morning:  {share: 0.24, windows: [[6, 14]]}
+  split:    {share: 0.29, windows: [[11, 16], [18, 23]]}
+  evening:  {share: 0.29, windows: [[16, 24]]}
+  full_day: {share: 0.13, windows: [[8, 20]]}
+  night:    {share: 0.05, windows: [[0, 6], [22, 24]]}   # covers late-night demand
+
+# Probability a partner logs in on a given day.
+login_probability:
+  weekday: 0.80
+  weekend: 0.70
+# Rain multiplies two-wheeler login probability by
+# rain.two_wheeler_supply_multiplier in demand.yaml (S-04).
