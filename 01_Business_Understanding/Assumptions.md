@@ -1,6 +1,6 @@
 # PULSE — Assumptions Log
 
-**Status:** v0.3 — written before the data generator (Stage 5). Every rule the
+**Status:** v0.4 — written before the data generator (Stage 5). Every rule the
 synthetic city follows is listed here. Numeric values live in `config/`;
 this file explains *why* each value exists and where it is used.
 
@@ -20,6 +20,7 @@ this file explains *why* each value exists and where it is used.
 | M-02 | Two partner types: **two-wheeler** (mobility + food) and **four-wheeler cab** (mobility only). | Eligibility becomes an explicit optimization constraint. |
 | M-03 | Two-wheeler mobility means bike-taxi rides. This is a modeling assumption, not a statement about current Karnataka regulation. | Keeps the shared-pool trade-off; flagged so it isn't read as a market claim. |
 | M-04 | Partners serve one service at a time and are assigned per planning period. | Matches the LP's period-level decision. |
+| M-05 | A ride request can be served by either vehicle type; the fare depends on the vehicle that is dispatched. Real customers choose bike or cab up front — this simplification is deliberate. | Keeps mobility a single service, exactly as the optimizer models it. |
 
 ## 2. City, zones and travel
 
@@ -114,7 +115,19 @@ phases must rediscover them **without being told**:
 4. Rain days create two-wheeler shortages across food-heavy zones.
 5. Weekend restaurant-cluster night peaks.
 
-## 9. Known limitations
+## 9. Open items to resolve before Phase 10 at scale
+
+These are known gaps, recorded so they are not forgotten. None affects the
+work completed so far.
+
+| ID | Item | Resolution planned |
+|----|------|--------------------|
+| X-01 | **Two baselines exist.** `optimization/evaluator.py` has a simple baseline for the toy; `generation/events.py` has the realistic status-quo dispatcher. | The headline counterfactual (Phase 11) must score both policies with the **same** simulator: run `events.py` once with status-quo dispatch and once with the optimizer's repositioning applied. |
+| X-02 | **Optimizer economics are still toy values.** `config/economics.yaml` holds ₹60/ride and ₹40/order; simulated Bengaluru platform revenue is roughly ₹17 per two-wheeler ride, ₹37 per cab ride and ₹50 per delivery. | Derive contribution per unit from the warehouse (Phase 5) and write a Bengaluru economics config before Phase 10 runs on the city. |
+| X-03 | **Shortages may be on the strong side.** Office-zone evening ride completion is ~26% and partner utilization ~47%. | Report all uplift as a model-based estimate with ranges; revisit calibration if the Phase 5–8 dashboards look implausible. |
+| X-04 | **One test range was widened.** After the fleet rose from 650 to 850, the citywide dinner-balance test changed from 0.8–1.3 to 0.6–1.1. | Justified by the simulation (effective capacity is lower than the planning ratio); recorded here for transparency. |
+
+## 10. Known limitations
 
 - Synthetic data: results are **model-based estimates**, not real-world causal impact.
 - Travel times use a detour factor, not real road routing.
