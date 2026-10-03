@@ -132,3 +132,24 @@ def bar_chart(labels: list[str], values: list[float], title: str, path, ylabel: 
     ax.grid(axis="y", alpha=0.3)
     fig.savefig(path, dpi=110, bbox_inches="tight")
     plt.close(fig)
+
+
+def line_panels(panels: list[tuple[str, pd.DataFrame, str, list[str]]], title: str, path,
+                ylabel: str = "per hour", styles: dict[str, dict] | None = None,
+                xlabel: str | None = None) -> None:
+    """Stacked line charts: each panel is (panel title, frame, x column, y columns)."""
+    styles = styles or {}
+    fig, axes = plt.subplots(len(panels), 1, figsize=(13, 3.6 * len(panels)), squeeze=False)
+    for ax, (ptitle, df, x, cols) in zip(axes[:, 0], panels):
+        for c in cols:
+            ax.plot(df[x], df[c].astype(float), label=c, **styles.get(c, {}))
+        ax.set_title(ptitle, fontsize=11)
+        ax.set_ylabel(ylabel)
+        if xlabel:
+            ax.set_xlabel(xlabel)
+        ax.grid(alpha=0.3)
+        ax.legend(loc="upper left", frameon=False, fontsize=8)
+    fig.suptitle(title, fontsize=13, weight="bold")
+    fig.tight_layout()
+    fig.savefig(path, dpi=110, bbox_inches="tight")
+    plt.close(fig)

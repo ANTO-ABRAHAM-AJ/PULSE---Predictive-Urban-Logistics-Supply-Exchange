@@ -22,7 +22,8 @@ go, when, and for which service — and whether it is economically justified.
 | Phase 5 | Marketplace performance analytics: 4 KPI views, 5 analyses, reconciled to Python | ✅ |
 | Phase 6 | Hyperlocal demand intelligence: real Bengaluru ward map, 5 analyses, heatmaps | ✅ |
 | Phase 7 | Supply intelligence: supply map, partner time states, idle supply vs reach | ✅ |
-| Phase 8 | Supply–demand imbalance: Marketplace Pressure Index, shortage types | In progress |
+| Phase 8 | Supply–demand imbalance: Marketplace Pressure Index, shortage types | ✅ |
+| Phase 9 | Forecasting: week-ahead demand, supply and pressure | In progress |
 
 ## Results documents
 
@@ -37,6 +38,7 @@ Every result table is generated from data by a report script — never typed by 
 | `06_Demand_Intelligence/01_…05_*.md` | Demand map of Bengaluru, zone profiles, hourly patterns, pressure points, restaurants, rain | `python scripts/report_phase6.py` |
 | `07_Supply_Intelligence/01_…05_*.md` | Supply map, partner time states, idle supply vs reach, empty km, vehicle eligibility | `python scripts/report_phase7.py` |
 | `08_Supply_Demand_Imbalance/01_…05_*.md` | Pressure Index (validated), pressure map, shortage types and their levers, service and rain pressure | `python scripts/report_phase8.py` |
+| `09_Forecasting/01_…04_*.md` | Forecast approach, demand and supply accuracy vs benchmark and noise floor, week-ahead shortage prediction | `python scripts/report_phase9.py` |
 
 ## Key findings so far (synthetic data, status-quo dispatch)
 
@@ -68,7 +70,7 @@ Data generation: `03_Data_Engineering/Data_Generation_Framework.md`
 ```bash
 pip install -r requirements-lock.txt   # exact tested versions (or requirements.txt)
 pip install -e .
-pytest                                 # 85 tests
+pytest                                 # 91 tests
 python scripts/run_toy.py              # toy optimizer
 python scripts/compare_policies.py     # optimizer vs baseline
 python scripts/bottlenecks.py          # marginal value of supply

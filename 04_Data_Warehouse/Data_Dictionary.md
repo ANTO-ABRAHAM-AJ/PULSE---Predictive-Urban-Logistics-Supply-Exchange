@@ -78,3 +78,14 @@ per zone and hour: `ride_requests`, `food_orders`, `lost_rides`, `lost_orders`,
 `pressure_state` (Under-supplied / Balanced / Over-supplied / No activity) and
 `shortage_type` (Fix now / Reposition ahead / Citywide shortage / None).
 Definitions: `08_Supply_Demand_Imbalance/README.md`.
+
+**Fact_Demand_Forecast** (Phase 9) — holdout forecasts: `time_key`, `zone_key`,
+`service_key`, `model_name`, `forecast_demand`, `actual_demand`.
+
+**Fact_Supply_Forecast** (Phase 9) — partners online by home zone: `time_key`,
+`zone_key`, `vehicle_key`, `model_name`, `forecast_partners`, `actual_partners`.
+
+**Fact_Pressure_Forecast** (Phase 9) — week-ahead shortage prediction:
+`forecast_work_hours`, `forecast_supply_hours`, `forecast_mpi`,
+`predicted_short`, `actual_short`, `lost_jobs`. All three are rebuilt by
+`scripts/report_phase9.py`; definitions in `09_Forecasting/01_Forecasting_Approach.md`.
