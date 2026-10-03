@@ -121,13 +121,17 @@ The right-hand panel of the Demand Map (analysis 01) shows the same losses by zo
 
 # 9. Key Observations
 
-### 9.1 The airport is the single largest pressure point
-Kempegowda Airport loses more jobs than any other zone — it is beyond
-repositioning reach of every other zone (Assumption C-07).
+### 9.1 Two zones are effectively cut off
+**Electronic City** loses the most jobs on weekdays and the **airport** loses
+the most across all days (Result Set B, map). The airport is beyond
+repositioning reach of every zone (Assumption C-07). Electronic City is a
+newer finding: at the evening peak, traffic slows to 15 km/h, the 20-minute
+reach shrinks to about 5 km, and the zone becomes nearly unreachable — almost
+every evening ride request there fails (Result Set A).
 
 ### 9.2 Office zones lose rides in the evening
-The evening exodus from office zones produces most of the remaining top
-pressure points.
+The evening exodus from office zones — Electronic City, Whitefield and Manyata
+— produces nearly all of the top weekday pressure points.
 
 ### 9.3 Pressure is concentrated
 A small number of zones and hours account for a large share of all lost jobs;
