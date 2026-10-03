@@ -1,3 +1,10 @@
 # Phase 10 — Supply Allocation & Repositioning Optimization
 
-Formulation write-up, baseline comparison (10A) and bottleneck / marginal-value analysis (10B). Model code lives in `src/pulse/optimization/`.
+Model code lives in `src/pulse/optimization/` (`model.py`, `baseline.py`,
+`evaluator.py`, `duals.py`).
+
+- **`Validation_Results.md`** — Stages 1–4 on the toy instance: hand
+  calculation, stress tests, optimized vs naive dispatch, shadow prices.
+  Regenerate with `python scripts/report_optimizer.py`.
+- City-scale formulation, baseline comparison (10A) and bottleneck analysis
+  (10B) on Bengaluru: to come.

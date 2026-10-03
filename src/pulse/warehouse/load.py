@@ -82,14 +82,19 @@ def table_count(conn, table: str) -> int:
     return conn.cursor().execute(f"SELECT COUNT_BIG(*) FROM dw.{table}").fetchone()[0]
 
 
-def quality_checks(conn) -> pd.DataFrame:
-    text = (SQL_DIR / "04_data_quality_checks.sql").read_text(encoding="utf-8")
+def run_query(conn, path: Path | str) -> pd.DataFrame:
+    """Run a saved .sql query file and return its (first) result set."""
+    text = Path(path).read_text(encoding="utf-8")
     text = re.sub(r"^\s*USE\s+\w+\s*;?\s*$", "", text, flags=re.IGNORECASE | re.MULTILINE)
     cur = conn.cursor().execute(text)
     while cur.description is None and cur.nextset():
         pass
-    rows = cur.fetchall()
-    return pd.DataFrame([tuple(r) for r in rows], columns=["check_name", "failing_rows"])
+    cols = [c[0] for c in cur.description]
+    return pd.DataFrame([tuple(r) for r in cur.fetchall()], columns=cols)
+
+
+def quality_checks(conn) -> pd.DataFrame:
+    return run_query(conn, SQL_DIR / "04_data_quality_checks.sql")
 
 
 def load_all(tables: dict[str, pd.DataFrame], order: list[str], settings: dict,
