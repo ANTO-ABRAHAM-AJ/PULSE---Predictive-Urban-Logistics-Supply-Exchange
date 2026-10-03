@@ -67,3 +67,14 @@ cancelled, restaurant zone otherwise) · `driver_key`.
 
 **Fact_Incentives** (Phase 11) — `scenario_code`, `time_key`, `zone_key`, `service_key`,
 optional `driver_key`, `incentive_type`, `incentive_amount`, `extra_partner_hours`.
+
+## Derived tables
+
+**Agg_Pressure_ZoneHour** (Phase 8, rebuilt by `scripts/report_phase8.py`) — one row
+per zone and hour: `ride_requests`, `food_orders`, `lost_rides`, `lost_orders`,
+`work_hours` (rides ÷ 2 + orders ÷ 3), `supply_hours` (partners present),
+`two_wheeler_hours`, `local_mpi`, `nbhd_work_hours`, `nbhd_supply_hours`,
+`nbhd_mpi` (zones within 20 minutes), `city_mpi`, `mobility_mpi`, `food_mpi`,
+`pressure_state` (Under-supplied / Balanced / Over-supplied / No activity) and
+`shortage_type` (Fix now / Reposition ahead / Citywide shortage / None).
+Definitions: `08_Supply_Demand_Imbalance/README.md`.

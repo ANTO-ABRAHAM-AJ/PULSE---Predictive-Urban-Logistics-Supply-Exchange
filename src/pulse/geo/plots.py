@@ -53,22 +53,31 @@ def choropleth_panels(zones, outline, values: dict[str, pd.Series], title: str,
 
 
 def zone_hour_heatmap(matrix: pd.DataFrame, column: str, title: str, path,
-                      cmap: str = "YlOrRd") -> None:
-    """Rows = zones (grouped by type), columns = hour of day."""
+                      cmap: str = "YlOrRd", center: float | None = None,
+                      vmax: float | None = None, label: str = "per weekday") -> None:
+    """Rows = zones (grouped by type), columns = hour of day.
+    `center` gives a diverging colour scale around that value (e.g. MPI = 1)."""
     order = _zone_order(matrix)
     grid = matrix.pivot_table(index="zone_code", columns="hour_of_day", values=column,
                               aggfunc="sum").reindex(order).reindex(columns=range(24), fill_value=0)
     types = matrix.drop_duplicates("zone_code").set_index("zone_code")["zone_type"].reindex(order)
 
     fig, ax = plt.subplots(figsize=(13, 8.5))
-    im = ax.imshow(grid.to_numpy(dtype=float), aspect="auto", cmap=cmap)
+    values = grid.to_numpy(dtype=float)
+    norm = None
+    if center is not None:
+        from matplotlib.colors import TwoSlopeNorm
+        top = vmax if vmax is not None else np.nanmax(values)
+        norm = TwoSlopeNorm(vmin=0, vcenter=center, vmax=max(top, center + 1e-6))
+        values = np.minimum(values, top)
+    im = ax.imshow(values, aspect="auto", cmap=cmap, norm=norm)
     ax.set_xticks(range(24), [f"{h:02d}" for h in range(24)], fontsize=8)
     ax.set_yticks(range(len(order)), [f"{z}  ({types[z].replace('_', ' ')})" for z in order], fontsize=8)
     ax.set_xlabel("Hour of day (weekdays)")
     for i in range(1, len(order)):                      # line between zone types
         if types.iloc[i] != types.iloc[i - 1]:
             ax.axhline(i - 0.5, color="white", linewidth=2)
-    fig.colorbar(im, ax=ax, shrink=0.8, label="per weekday")
+    fig.colorbar(im, ax=ax, shrink=0.8, label=label)
     ax.set_title(title, fontsize=13, weight="bold")
     fig.savefig(path, dpi=110, bbox_inches="tight")
     plt.close(fig)
@@ -85,6 +94,40 @@ def stacked_shares(df: pd.DataFrame, x: str, columns: list[str], title: str, pat
     ax.set_xlabel("Hour of day (weekdays)")
     ax.set_ylabel(ylabel)
     ax.legend(loc="upper left", bbox_to_anchor=(1.01, 1), frameon=False)
+    ax.set_title(title, fontsize=13, weight="bold")
+    ax.grid(axis="y", alpha=0.3)
+    fig.savefig(path, dpi=110, bbox_inches="tight")
+    plt.close(fig)
+
+
+def stacked_bars(df: pd.DataFrame, x: str, columns: list[str], title: str, path,
+                 colors: list[str] | None = None, ylabel: str = "per weekday") -> None:
+    """Stacked bar chart of absolute values (e.g. lost jobs by shortage type)."""
+    fig, ax = plt.subplots(figsize=(12, 5.5))
+    bottom = np.zeros(len(df))
+    for i, c in enumerate(columns):
+        vals = df[c].astype(float).to_numpy()
+        ax.bar(df[x], vals, bottom=bottom, label=c, color=None if colors is None else colors[i])
+        bottom += vals
+    ax.set_xticks(df[x])
+    ax.set_xlabel(x)
+    ax.set_ylabel(ylabel)
+    ax.legend(loc="upper left", frameon=False)
+    ax.set_title(title, fontsize=13, weight="bold")
+    ax.grid(axis="y", alpha=0.3)
+    fig.savefig(path, dpi=110, bbox_inches="tight")
+    plt.close(fig)
+
+
+def bar_chart(labels: list[str], values: list[float], title: str, path, ylabel: str,
+              color: str = "#c0392b", fmt: str = "{:.1f}") -> None:
+    """Simple labelled bar chart (e.g. loss rate by MPI band)."""
+    fig, ax = plt.subplots(figsize=(10, 5))
+    bars = ax.bar(labels, values, color=color)
+    for b, v in zip(bars, values):
+        ax.annotate(fmt.format(v), (b.get_x() + b.get_width() / 2, b.get_height()),
+                    ha="center", va="bottom", fontsize=9)
+    ax.set_ylabel(ylabel)
     ax.set_title(title, fontsize=13, weight="bold")
     ax.grid(axis="y", alpha=0.3)
     fig.savefig(path, dpi=110, bbox_inches="tight")
