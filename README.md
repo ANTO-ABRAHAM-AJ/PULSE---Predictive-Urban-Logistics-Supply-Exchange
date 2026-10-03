@@ -19,7 +19,8 @@ go, when, and for which service — and whether it is economically justified.
 | 4 | Shadow prices verified by re-solving; bottleneck ranking | ✅ |
 | 5 | Synthetic Bengaluru: 24 zones, 16 weeks, 850 partners, 1.1M rides and orders | ✅ |
 | Phase 4 | SQL Server data warehouse: 15-table star schema, loader, quality checks | ✅ |
-| Phase 5 | Marketplace performance analytics: 4 KPI views, 5 analyses | In progress |
+| Phase 5 | Marketplace performance analytics: 4 KPI views, 5 analyses, reconciled to Python | ✅ |
+| Phase 6 | Hyperlocal demand intelligence | Next |
 
 ## Results documents
 

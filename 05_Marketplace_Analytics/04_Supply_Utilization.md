@@ -109,9 +109,12 @@ _Generated 2026-10-03 by a report script — do not edit by hand._
 
 # 8. Key Observations
 
-### 8.1 Idle partners and lost jobs occur in the same hours
-In the commute peaks, jobs are lost for lack of a partner while many
-partner-hours sit idle at the same time (Result Set A).
+### 8.1 Two different peak problems
+In the **evening** peak, jobs are lost for lack of a partner while hundreds of
+partner-hours sit idle in the same hour — a **positioning** problem. In the
+**morning** peak, far fewer partners are on shift and those online are kept
+busy; idle time is low, so this peak is also a **shift-coverage** problem
+(Result Set A).
 
 ### 8.2 Residential zones hold surplus supply; the airport is starved
 Over the whole period, residential zones are the only zone type holding a
@@ -133,18 +136,22 @@ busy.
 
 # 9. Business Interpretation
 
-The marketplace's problem is **location and timing**, not fleet size: there
-are enough partners online in total, but too many are in the wrong zones when
-demand peaks. This is the central finding Phase 5 hands to the rest of PULSE.
+The marketplace has enough partners online over the day, but two things go
+wrong at the peaks. In the evening, too many partners are in the wrong zones
+when demand peaks. In the morning, too few partners are on shift at all,
+because supply ramps up only late in the morning. Both are about **timing and
+location**, not total fleet size.
 
 ---
 
 # 10. Business Implication
 
-Moving existing partners ahead of demand (repositioning) can recover lost jobs
-without adding fleet cost. Incentivising extra supply (Phase 11) is mainly
-justified where no existing partner can reach in time — for example the
-airport.
+- **Evening:** moving existing partners ahead of demand (repositioning, Phase 10)
+  can recover lost jobs without adding fleet cost.
+- **Morning:** repositioning alone cannot create partners who are not on shift;
+  incentives that bring partners online earlier (Phase 11) are the natural lever.
+- **Airport:** no existing partner can reach in time, so extra supply there must
+  come from incentives or partners already stationed there.
 
 ---
 
