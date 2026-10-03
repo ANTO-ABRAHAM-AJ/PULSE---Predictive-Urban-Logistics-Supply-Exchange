@@ -20,7 +20,8 @@ go, when, and for which service — and whether it is economically justified.
 | 5 | Synthetic Bengaluru: 24 zones, 16 weeks, 850 partners, 1.1M rides and orders | ✅ |
 | Phase 4 | SQL Server data warehouse: 15-table star schema, loader, quality checks | ✅ |
 | Phase 5 | Marketplace performance analytics: 4 KPI views, 5 analyses, reconciled to Python | ✅ |
-| Phase 6 | Hyperlocal demand intelligence: real Bengaluru ward map, 5 analyses, heatmaps | In progress |
+| Phase 6 | Hyperlocal demand intelligence: real Bengaluru ward map, 5 analyses, heatmaps | ✅ |
+| Phase 7 | Supply intelligence: supply map, partner time states, idle supply vs reach | In progress |
 
 ## Results documents
 
@@ -33,6 +34,7 @@ Every result table is generated from data by a report script — never typed by 
 | `04_Data_Warehouse/Load_Results.md` | Warehouse: tables loaded, quality checks, SQL ↔ Python reconciliation | `python scripts/report_warehouse.py` |
 | `05_Marketplace_Analytics/01_…05_*.md` | Baseline marketplace KPIs: overview, mobility, food, supply, economics | `python scripts/report_phase5.py` |
 | `06_Demand_Intelligence/01_…05_*.md` | Demand map of Bengaluru, zone profiles, hourly patterns, pressure points, restaurants, rain | `python scripts/report_phase6.py` |
+| `07_Supply_Intelligence/01_…05_*.md` | Supply map, partner time states, idle supply vs reach, empty km, vehicle eligibility | `python scripts/report_phase7.py` |
 
 ## Key findings so far (synthetic data, status-quo dispatch)
 
@@ -64,7 +66,7 @@ Data generation: `03_Data_Engineering/Data_Generation_Framework.md`
 ```bash
 pip install -r requirements-lock.txt   # exact tested versions (or requirements.txt)
 pip install -e .
-pytest                                 # 77 tests
+pytest                                 # 81 tests
 python scripts/run_toy.py              # toy optimizer
 python scripts/compare_policies.py     # optimizer vs baseline
 python scripts/bottlenecks.py          # marginal value of supply

@@ -21,9 +21,12 @@ def _zone_order(matrix: pd.DataFrame) -> list[str]:
 
 
 def choropleth_panels(zones, outline, values: dict[str, pd.Series], title: str,
-                      path, cmaps: dict[str, str] | None = None) -> None:
-    """One map per entry in `values` ({panel title: Series indexed by zone_code})."""
+                      path, cmaps: dict[str, str] | None = None,
+                      units: dict[str, str] | None = None) -> None:
+    """One map per entry in `values` ({panel title: Series indexed by zone_code}).
+    `units` sets each panel's colour-bar label (default "per weekday")."""
     cmaps = cmaps or {}
+    units = units or {}
     n = len(values)
     fig, axes = plt.subplots(1, n, figsize=(5.6 * n, 6.6))
     axes = np.atleast_1d(axes)
@@ -32,7 +35,7 @@ def choropleth_panels(zones, outline, values: dict[str, pd.Series], title: str,
         outline.plot(ax=ax, color="#f0f0f0", edgecolor="#bbbbbb", linewidth=0.6)
         g.plot(ax=ax, column="value", cmap=cmaps.get(label, "YlOrRd"), edgecolor="white",
                linewidth=0.8, legend=True,
-               legend_kwds={"shrink": 0.55, "label": "per weekday"})
+               legend_kwds={"shrink": 0.55, "label": units.get(label, "per weekday")})
         vmax = g["value"].max()
         for _, r in g.iterrows():
             p = r.geometry.representative_point()
@@ -67,5 +70,22 @@ def zone_hour_heatmap(matrix: pd.DataFrame, column: str, title: str, path,
             ax.axhline(i - 0.5, color="white", linewidth=2)
     fig.colorbar(im, ax=ax, shrink=0.8, label="per weekday")
     ax.set_title(title, fontsize=13, weight="bold")
+    fig.savefig(path, dpi=110, bbox_inches="tight")
+    plt.close(fig)
+
+
+def stacked_shares(df: pd.DataFrame, x: str, columns: list[str], title: str, path,
+                   colors: list[str] | None = None, ylabel: str = "% of online time") -> None:
+    """Stacked area chart, e.g. share of partner time in each state by hour."""
+    fig, ax = plt.subplots(figsize=(12, 5.5))
+    ax.stackplot(df[x], *[df[c].astype(float) for c in columns], labels=columns, colors=colors, alpha=0.9)
+    ax.set_xlim(df[x].min(), df[x].max())
+    ax.set_ylim(0, 100)
+    ax.set_xticks(range(int(df[x].min()), int(df[x].max()) + 1))
+    ax.set_xlabel("Hour of day (weekdays)")
+    ax.set_ylabel(ylabel)
+    ax.legend(loc="upper left", bbox_to_anchor=(1.01, 1), frameon=False)
+    ax.set_title(title, fontsize=13, weight="bold")
+    ax.grid(axis="y", alpha=0.3)
     fig.savefig(path, dpi=110, bbox_inches="tight")
     plt.close(fig)
