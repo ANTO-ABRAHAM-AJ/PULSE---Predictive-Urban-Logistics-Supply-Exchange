@@ -19,7 +19,7 @@ go, when, and for which service — and whether it is economically justified.
 | 4 | Shadow prices verified by re-solving; bottleneck ranking | ✅ |
 | 5 | Synthetic Bengaluru: 24 zones, 16 weeks, 850 partners, 1.1M rides and orders | ✅ |
 | Phase 4 | SQL Server data warehouse: 15-table star schema, loader, quality checks | ✅ |
-| Phase 5 | Marketplace performance analytics (T-SQL KPI views) | Next |
+| Phase 5 | Marketplace performance analytics: 4 KPI views, 5 analyses | In progress |
 
 ## Results documents
 
@@ -30,6 +30,7 @@ Every result table is generated from data by a report script — never typed by 
 | `10_Optimization/Validation_Results.md` | Optimizer proof on the toy: hand calculation, stress tests, +9% vs naive dispatch, bottleneck pricing | `python scripts/report_optimizer.py` |
 | `03_Data_Engineering/Generation_Results.md` | Synthetic Bengaluru: planted patterns recovered, status-quo performance, the supply mismatch | `python scripts/report_generation.py` |
 | `04_Data_Warehouse/Load_Results.md` | Warehouse: tables loaded, quality checks, SQL ↔ Python reconciliation | `python scripts/report_warehouse.py` |
+| `05_Marketplace_Analytics/01_…05_*.md` | Baseline marketplace KPIs: overview, mobility, food, supply, economics | `python scripts/report_phase5.py` |
 
 ## Key findings so far (synthetic data, status-quo dispatch)
 
@@ -61,7 +62,7 @@ Data generation: `03_Data_Engineering/Data_Generation_Framework.md`
 ```bash
 pip install -r requirements-lock.txt   # exact tested versions (or requirements.txt)
 pip install -e .
-pytest                                 # 68 tests
+pytest                                 # 71 tests
 python scripts/run_toy.py              # toy optimizer
 python scripts/compare_policies.py     # optimizer vs baseline
 python scripts/bottlenecks.py          # marginal value of supply

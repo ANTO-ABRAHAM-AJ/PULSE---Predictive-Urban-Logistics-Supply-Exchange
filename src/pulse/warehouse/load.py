@@ -93,6 +93,22 @@ def run_query(conn, path: Path | str) -> pd.DataFrame:
     return pd.DataFrame([tuple(r) for r in cur.fetchall()], columns=cols)
 
 
+def run_query_all(conn, path: Path | str) -> list[pd.DataFrame]:
+    """Run a saved .sql file and return EVERY result set it produces, in order
+    (an analysis file usually has Result Set A and Result Set B)."""
+    text = Path(path).read_text(encoding="utf-8")
+    text = re.sub(r"^\s*USE\s+\w+\s*;?\s*$", "", text, flags=re.IGNORECASE | re.MULTILINE)
+    cur = conn.cursor().execute("SET NOCOUNT ON;\n" + text)
+    frames = []
+    while True:
+        if cur.description is not None:
+            cols = [c[0] for c in cur.description]
+            frames.append(pd.DataFrame([tuple(r) for r in cur.fetchall()], columns=cols))
+        if not cur.nextset():
+            break
+    return frames
+
+
 def quality_checks(conn) -> pd.DataFrame:
     return run_query(conn, SQL_DIR / "04_data_quality_checks.sql")
 
