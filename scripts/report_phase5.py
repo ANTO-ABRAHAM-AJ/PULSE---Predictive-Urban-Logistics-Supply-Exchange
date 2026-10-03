@@ -56,6 +56,8 @@ def fmt_for(df: pd.DataFrame) -> dict:
             f[c] = "{:.2f}"
         elif "(min)" in name or "km" in name:
             f[c] = "{:.1f}"
+        elif any(k in name for k in ("per day", "per weekday", "per hour", "per restaurant")):
+            f[c] = lambda v: f"{v:,.0f}" if isinstance(v, int) else f"{v:,.1f}"
     return f
 
 
