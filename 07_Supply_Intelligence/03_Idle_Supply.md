@@ -117,9 +117,11 @@ _Generated 2026-10-03 by a report script — do not edit by hand._
 
 # 9. Key Observations
 
-### 9.1 The largest idle pools are in residential zones
-Partners wait where they live and where food jobs end — residential zones —
-and these zones lose almost no jobs themselves (Result Set A).
+### 9.1 Idle pools form where the commute leaves partners
+The largest idle pools are in the CBD in the late morning — partners carried
+there by morning rides, with little to do once the commute ends — and in
+residential zones in the evening, after carrying riders home. None of these
+zone-hours loses jobs itself (Result Set A).
 
 ### 9.2 Idle supply is mostly out of reach of unserved demand
 In the hours with the most lost jobs, only a small share of idle partners were
@@ -129,6 +131,11 @@ could not have arrived in time even if dispatched immediately.
 ### 9.3 Peak traffic makes it worse
 At peak hours reach shrinks to about 5 km, so the idle supply that is "close"
 off-peak becomes "too far" exactly when demand needs it.
+
+### 9.4 The window for action is just before the peak
+Idle supply within reach of losing zones is far higher at 08:00, as the
+morning peak begins, than at 09:00 when losses are greatest (Result Set B).
+Moves made an hour early can reach demand that same-hour dispatch cannot.
 
 ---
 

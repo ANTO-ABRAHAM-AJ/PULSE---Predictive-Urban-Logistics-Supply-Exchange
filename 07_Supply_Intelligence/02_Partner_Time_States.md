@@ -108,10 +108,11 @@ _Generated 2026-10-03 by a report script — do not edit by hand._
 Across a weekday, partners spend roughly half their online time without a job
 (Result Set A, chart).
 
-### 9.2 Idle time collapses only at the morning peak
-Idle share is lowest during the morning commute, when few partners are on
-shift; it stays high at the evening peak, when many partners are online but in
-the wrong zones (Phase 5, analysis 04).
+### 9.2 Idle time is lowest at the edges of the peaks, not in the middle
+Idle share is lowest at the morning commute, when few partners are on shift,
+and falls again at the end of the evening peak. In the early evening, when the
+most partners are online, around half of their time is still idle — they are
+online, but in the wrong zones (Phase 5, analysis 04).
 
 ### 9.3 Food work is spread across fetching and delivering
 For food, a large share of busy time is spent reaching the restaurant;
