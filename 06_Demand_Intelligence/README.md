@@ -12,7 +12,7 @@
 | Geography | `scripts/build_zone_geometry.py` → `config/bengaluru/zone_boundaries.geojson` | 24 zone polygons built from the 243 real BBMP wards (2022) |
 | Analyses | `sql/01_…` to `sql/05_…` | One file per analysis; Result Sets A and B |
 | Chart data | `sql/06_zone_hour_matrix.sql` | Zone × hour weekday matrix for the maps and heatmaps |
-| Findings | `01_…md` to `05_…md` | ORGEE format; tables, headlines and charts generated |
+| Findings | `01_…md` to `05_…md` | Structured write-up; tables, headlines and charts generated |
 | Evidence | `images/` (SSMS screenshots), `images/charts/` (generated) | |
 
 ```bash

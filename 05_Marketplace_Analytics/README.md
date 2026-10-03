@@ -9,7 +9,7 @@ PULSE marketplace under status-quo dispatch, measured from `PULSE_DW`.
 |-------|------|---------|
 | KPI views | `sql/00_create_kpi_views.sql` | Four views at Zone × Hour grain holding sums (never rates). The single source of truth for every KPI and for Power BI. |
 | Analyses | `sql/01_…` to `sql/05_…` | One file per analysis; each returns Result Set A and B. |
-| Findings | `01_…md` to `05_…md` | ORGEE-format write-up; tables and headline numbers are generated. |
+| Findings | `01_…md` to `05_…md` | Structured write-up; tables and headline numbers are generated. |
 | Evidence | `images/` | SSMS screenshots of each result set. |
 
 ```bash

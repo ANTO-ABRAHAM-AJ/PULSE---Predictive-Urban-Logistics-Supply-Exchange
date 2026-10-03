@@ -41,7 +41,7 @@ python scripts/report_phase8.py   # rebuild the pressure table, all five documen
 | Pressure table | `sql/00_build_pressure_table.sql` → `dw.Agg_Pressure_ZoneHour` |
 | Analyses | `sql/01_…` to `sql/05_…` (Result Sets A and B) |
 | Chart data | `sql/06_pressure_matrix.sql` |
-| Findings | `01_…md` to `05_…md` (ORGEE format, generated tables and headlines) |
+| Findings | `01_…md` to `05_…md` (structured write-up, generated tables and headlines) |
 
 ## Analyses
 

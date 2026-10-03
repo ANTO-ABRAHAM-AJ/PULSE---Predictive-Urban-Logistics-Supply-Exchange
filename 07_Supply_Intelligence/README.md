@@ -13,7 +13,7 @@ Compare with the Demand Map: `06_Demand_Intelligence/images/charts/demand_map.pn
 |-------|------|---------|
 | Analyses | `sql/01_…` to `sql/05_…` | One file per analysis; Result Sets A and B |
 | Chart data | `sql/06_zone_hour_supply.sql` | Zone × hour supply matrix and partners living per zone |
-| Findings | `01_…md` to `05_…md` | ORGEE format; tables, headlines and charts generated |
+| Findings | `01_…md` to `05_…md` | Structured write-up; tables, headlines and charts generated |
 | Evidence | `images/` (SSMS screenshots), `images/charts/` (generated) | |
 
 ```bash

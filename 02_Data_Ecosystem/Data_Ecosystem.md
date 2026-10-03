@@ -221,9 +221,9 @@ flowchart LR
 |-----|---------------------|--------|
 | **Partner state changes are not individual events.** Time online, busy and idle is recorded per hour, not each switch between available, assigned, on trip and delivering. | PULSE plans supply per hour (the optimizer's period), so hourly busy and idle time is the level of detail decisions need. | Phase 7 can measure utilization and idle supply by zone and hour, but not minute-by-minute state sequences. |
 | **Locations are zones, not points.** | All decisions in PULSE are zone-level (Zone × Time × Service). | Distances use zone centroids with a detour factor (Assumption C-04). |
-| **Order items are not modelled.** | Basket contents do not affect supply allocation; order value is enough for economics. | No menu or item analysis — which is also out of PULSE's scope (owned by ORGEE). |
+| **Order items are not modelled.** | Basket contents do not affect supply allocation; order value is enough for economics. | No menu or item analysis — which is also outside the scope of an operations project. |
 | **Cancellation time is not recorded.** | The outcome and reason matter for service levels; the exact second does not. | `Fact_Delivery_Events` stamps a cancellation at the last known milestone. |
-| **Customers have only a home zone.** | PULSE is an operations project; customer analytics belong to ORGEE. | No customer segmentation in PULSE. |
+| **Customers have only a home zone.** | PULSE is an operations project; customer analytics are outside its scope. | No customer segmentation in PULSE. |
 
 ---
 
