@@ -1,0 +1,19 @@
+# Phase 10 repositioning policy (Assumptions O-08, O-09, E-04 ... E-06).
+# Economics per job come from the warehouse at run time (X-02):
+#   sql/05_economics_inputs.sql -> platform revenue per completed job, history weeks.
+# The settings below were chosen on VALIDATION weeks 9-12 with
+# scripts/tune_policy.py; the holdout weeks were never used for tuning.
+
+jobs_per_partner_per_hour: {mobility: 2, food: 3}      # O-01
+reposition_cost_per_km: {two_wheeler: 6, four_wheeler: 12}   # E-06: paid to the partner for the empty drive
+remote_efficiency: {mobility: 0.6, food: 0.8}          # O-08: share of a partner-hour left after the pickup drive
+lookahead: 0.5           # weight on next hour's forecast (expected demand over the next ~90 minutes)
+max_move_km: 12          # longest repositioning move considered
+seed: 10                 # stochastic rounding of LP flows into whole moves
+
+scenarios:               # unserved penalty (INR per lost job) = value of a served customer beyond today's revenue (E-05)
+  optimizer_profit:            {penalty: 0,  forecast: GBM calendar}
+  optimizer_service:           {penalty: 20, forecast: GBM calendar}
+  optimizer_perfect_forecast:  {penalty: 0,  forecast: actual}
+
+replay_seed: 2026        # common random numbers for every scenario (X-01)

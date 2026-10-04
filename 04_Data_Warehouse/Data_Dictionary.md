@@ -89,3 +89,14 @@ Definitions: `08_Supply_Demand_Imbalance/README.md`.
 `forecast_work_hours`, `forecast_supply_hours`, `forecast_mpi`,
 `predicted_short`, `actual_short`, `lost_jobs`. All three are rebuilt by
 `scripts/report_phase9.py`; definitions in `09_Forecasting/01_Forecasting_Approach.md`.
+
+**Agg_Policy_ZoneHour** (Phase 10) — simulated holdout outcome per `scenario_code`,
+hour, zone and service: `requests`, `completed`, `lost_no_partner`,
+`cancelled_customer`, `revenue`.
+
+**Agg_Supply_Value** (Phase 10) — LP shadow price of one more partner by scenario,
+hour, zone and vehicle (`shadow_price`, INR for that hour; only positive values stored).
+
+**Fact_Repositioning** and **Fact_Supply_Allocation**, created empty in Phase 4,
+are filled by Phase 10 with every simulated move and every LP flow. All four are
+rebuilt by `scripts/report_phase10.py`; scenarios are defined in `config/bengaluru/policy.yaml`.

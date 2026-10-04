@@ -46,7 +46,9 @@ def fmt_for(df: pd.DataFrame) -> dict:
     f = {}
     for c in df.columns:
         name = str(c)
-        if "%" in name:
+        if "change %" in name.lower():
+            f[c] = "{:+.2f}"
+        elif "%" in name:
             f[c] = "{:.1f}"
         elif "(INR)" in name and ("per" in name or "AOV" in name):
             f[c] = lambda v: f"₹{v:,.2f}" if isinstance(v, float) and not v.is_integer() else inr(v)

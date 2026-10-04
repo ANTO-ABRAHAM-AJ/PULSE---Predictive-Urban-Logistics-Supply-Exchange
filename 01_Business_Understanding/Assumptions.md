@@ -93,6 +93,8 @@ Expected demand per **Zone × Hour × Service** =
 | O-05 | **Status-quo dispatch** (what history contains): each job goes to the free, online, eligible partner who can arrive earliest, within 8 km; no repositioning. Food partners are dispatched just-in-time to reach the restaurant around ready time. |
 | O-06 | Partners start each day in their home zone, end each job where it ends, and a job running past midnight keeps them busy into the next day. |
 | O-07 | Ride destinations follow time-of-day attraction by zone type (offices in the morning, homes in the evening) with distance decay (5 km). |
+| O-08 | **Dispatch reach in the optimizer** (Phase 10): a partner can serve a nearby zone without moving — rides within the 20-minute reach at the hour's speed, food within the 8 km pickup limit — at 60% (rides) / 80% (food) of a partner-hour's capacity, because of the pickup drive. Without this, the LP paid to move partners into zones dispatch already covered. |
+| O-09 | **Repositioning mechanics** (Phase 10): at the start of each hour only idle partners who stay online next hour may be moved; a moved partner is unavailable while driving (zone-centroid road km at the hour's speed) and is paid per km (E-06). |
 
 ## 7. Economics (all INR, *illustrative*, calibrated in Stage 5)
 
@@ -101,9 +103,9 @@ Expected demand per **Zone × Hour × Service** =
 | E-01 | Mobility fare | Base + per-km rate; four-wheeler fares higher than two-wheeler. |
 | E-02 | Food order value | Average order ~₹400, platform commission ~20%, plus a delivery fee. |
 | E-03 | Partner payout | Per-trip / per-delivery base + per-km component. |
-| E-04 | **Contribution per unit** = platform revenue − partner payout − variable cost. This is the `contribution_per_unit` in `config/economics.yaml`. |
-| E-05 | **Unserved penalty** = lost contribution proxy for future churn. It is a business judgement, so Phase 11 tests sensitivity to it. |
-| E-06 | **Repositioning cost** = per-km cost by vehicle type (fuel + partner time compensation). |
+| E-04 | **Contribution per unit** = platform revenue − partner payout − variable cost. Toy: `config/economics.yaml`. Bengaluru (Phase 10): platform revenue per completed job in the history weeks, read from the warehouse — about ₹27 per ride and ₹49 per order. |
+| E-05 | **Unserved penalty** = lost contribution proxy for future churn. It is a business judgement: Phase 10 reports ₹0 (profit policy) and ₹20 (service policy) and derives the break-even value. |
+| E-06 | **Repositioning cost** = per-km cost by vehicle type (fuel + partner time compensation): ₹6/km two-wheeler (equal to the food payout per km), ₹12/km cab. `config/bengaluru/policy.yaml`. |
 | E-07 | **Incentives** (Phase 11): extra online partner-hours supplied per ₹ of incentive follow a diminishing-returns curve. The curve is an assumption; results are reported across a range. |
 
 ## 8. Planted truths for validation
@@ -117,15 +119,15 @@ phases must rediscover them **without being told**:
 4. Rain days create two-wheeler shortages across food-heavy zones.
 5. Weekend restaurant-cluster night peaks.
 
-## 9. Open items to resolve before Phase 10 at scale
+## 9. Open items (X-01 and X-02 resolved in Phase 10)
 
 These are known gaps, recorded so they are not forgotten. None affects the
 work completed so far.
 
 | ID | Item | Resolution planned |
 |----|------|--------------------|
-| X-01 | **Two baselines exist.** `optimization/evaluator.py` has a simple baseline for the toy; `generation/events.py` has the realistic status-quo dispatcher. | The headline counterfactual (Phase 11) must score both policies with the **same** simulator: run `events.py` once with status-quo dispatch and once with the optimizer's repositioning applied. |
-| X-02 | **Optimizer economics are still toy values.** `config/economics.yaml` holds ₹60/ride and ₹40/order; simulated Bengaluru platform revenue is roughly ₹17 per two-wheeler ride, ₹37 per cab ride and ₹50 per delivery. | Derive contribution per unit from the warehouse (Phase 5) and write a Bengaluru economics config before Phase 10 runs on the city. |
+| X-01 | ~~Two baselines exist.~~ **Resolved in Phase 10:** every policy, including the status quo, is replayed through `optimization/simulation.py` with common random numbers; the status-quo replay reproduces the historical completion rates. | — |
+| X-02 | ~~Optimizer economics are still toy values.~~ **Resolved in Phase 10:** contribution per job is read from the warehouse (`10_Optimization/sql/05_economics_inputs.sql`, history weeks). | — |
 | X-03 | **Shortages may be on the strong side.** Office-zone evening ride completion is ~26% and partner utilization ~47%. | Report all uplift as a model-based estimate with ranges; revisit calibration if the Phase 5–8 dashboards look implausible. |
 | X-04 | **One test range was widened.** After the fleet rose from 650 to 850, the citywide dinner-balance test changed from 0.8–1.3 to 0.6–1.1. | Justified by the simulation (effective capacity is lower than the planning ratio); recorded here for transparency. |
 

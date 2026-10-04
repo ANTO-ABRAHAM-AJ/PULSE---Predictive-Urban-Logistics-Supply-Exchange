@@ -17,6 +17,16 @@ Constraints
     service level: u[j,s] <= (1 - alpha[s]) * D[j,s]
     eligibility / reach: x is only created where e[k,s] and dist[i,j] <= tau
 
+Optional extension (Phase 10, used when the instance has "service_reach_km"):
+    y[i, j, k, s] >= 0   partners of type k that STAY in zone i but serve
+                         demand in a nearby zone j through normal dispatch
+                         (dist[i,j] <= reach[s]); no repositioning cost, but
+                         each covers only remote_efficiency[s] x q[s] jobs
+                         because of the pickup drive.
+    This matches how dispatch really works, so paid moves (x with i != j)
+    are chosen only when a whole neighbourhood is short. Without the
+    "service_reach_km" key the model is exactly the Stage 1-4 model.
+
 Solved as a continuous LP with GLOP so dual values are valid
 (used for marginal-value analysis in Stage 4).
 """
@@ -79,6 +89,18 @@ def solve_allocation(inst: dict) -> AllocationResult:
 
     # Variables
     x = {a: solver.NumVar(0.0, solver.infinity(), "x_%s_%s_%s_%s" % a) for a in _arcs(inst)}
+    y = {}                                       # serve-from-neighbour arcs (optional)
+    reach = inst.get("service_reach_km")
+    if reach:
+        eff = inst["remote_efficiency"]
+        for i in Z:
+            for j in Z:
+                if i == j:
+                    continue
+                for k in K:
+                    for s in S:
+                        if inst["eligibility"][k][s] and dist[i][j] <= reach[s]:
+                            y[i, j, k, s] = solver.NumVar(0.0, solver.infinity(), "y_%s_%s_%s_%s" % (i, j, k, s))
     u = {}
     for j in Z:
         for s in S:
@@ -86,11 +108,19 @@ def solve_allocation(inst: dict) -> AllocationResult:
             u[j, s] = solver.NumVar(0.0, max(cap, 0.0), f"u_{j}_{s}")
 
     # Supply constraints
+    out_x, in_x, out_y, in_y = {}, {}, {}, {}
+    for (a, b, kk, ss), v in x.items():
+        out_x.setdefault((a, kk), []).append(v)
+        in_x.setdefault((b, ss), []).append(q[ss] * v)
+    for (a, b, kk, ss), v in y.items():
+        out_y.setdefault((a, kk), []).append(v)
+        in_y.setdefault((b, ss), []).append(inst["remote_efficiency"][ss] * q[ss] * v)
+
     supply_con = {}
     for i in Z:
         for k in K:
             supply_con[i, k] = solver.Add(
-                sum(v for (a, b, kk, ss), v in x.items() if a == i and kk == k) <= supply[i][k],
+                sum(out_x.get((i, k), [])) + sum(out_y.get((i, k), [])) <= supply[i][k],
                 f"supply_{i}_{k}",
             )
 
@@ -98,8 +128,7 @@ def solve_allocation(inst: dict) -> AllocationResult:
     for j in Z:
         for s in S:
             solver.Add(
-                sum(q[s] * v for (a, b, kk, ss), v in x.items() if b == j and ss == s)
-                + u[j, s] >= demand[j][s],
+                sum(in_x.get((j, s), [])) + sum(in_y.get((j, s), [])) + u[j, s] >= demand[j][s],
                 f"cover_{j}_{s}",
             )
 

@@ -153,3 +153,49 @@ def line_panels(panels: list[tuple[str, pd.DataFrame, str, list[str]]], title: s
     fig.tight_layout()
     fig.savefig(path, dpi=110, bbox_inches="tight")
     plt.close(fig)
+
+
+def flow_map(zones, outline, flows: pd.DataFrame, title: str, path, top: int = 25) -> None:
+    """Arrows between zone centres; width by volume. flows: from_zone, to_zone, value."""
+    from matplotlib.patches import FancyArrowPatch
+    pts = zones.set_index("zone_id").geometry.representative_point()
+    f = flows.sort_values("value", ascending=False).head(top)
+    vmax = f["value"].max() if len(f) else 1.0
+    fig, ax = plt.subplots(figsize=(8.5, 9))
+    outline.plot(ax=ax, color="#f0f0f0", edgecolor="#bbbbbb", linewidth=0.6)
+    zones.plot(ax=ax, color="#ffffff", edgecolor="#cccccc", linewidth=0.6)
+    for _, r in f.iterrows():
+        a, b = pts[r["from_zone"]], pts[r["to_zone"]]
+        ax.add_patch(FancyArrowPatch((a.x, a.y), (b.x, b.y), arrowstyle="-|>", mutation_scale=12,
+                                     linewidth=0.8 + 5.0 * r["value"] / vmax, color="#6a3d9a", alpha=0.75,
+                                     connectionstyle="arc3,rad=0.15"))
+    for zid, p in pts.items():
+        ax.annotate(zid, (p.x, p.y), ha="center", va="center", fontsize=7, color="#333333")
+    ax.set_axis_off()
+    ax.set_title(title, fontsize=12, weight="bold")
+    fig.text(0.5, 0.03, ATTRIBUTION, ha="center", fontsize=6.5, color="#666666")
+    fig.savefig(path, dpi=110, bbox_inches="tight")
+    plt.close(fig)
+
+
+def scatter_points(df: pd.DataFrame, x: str, y: str, label: str, title: str, path,
+                   highlight: pd.DataFrame | None = None) -> None:
+    """Labelled scatter, e.g. a trade-off frontier; `highlight` rows drawn larger."""
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.scatter(df[x], df[y], color="#9e9ac8", s=40, label="Validation weeks (tuning)")
+    for _, r in df.iterrows():
+        ax.annotate(r[label], (r[x], r[y]), fontsize=7, xytext=(4, 4), textcoords="offset points",
+                    color="#555555")
+    if highlight is not None and len(highlight):
+        ax.scatter(highlight[x], highlight[y], color="#d95f02", s=110, marker="D", label="Holdout weeks (test)")
+        for _, r in highlight.iterrows():
+            ax.annotate(r[label], (r[x], r[y]), fontsize=8, weight="bold", xytext=(6, -10),
+                        textcoords="offset points", color="#d95f02")
+    ax.axhline(0, color="#999999", linewidth=0.8)
+    ax.set_xlabel(x)
+    ax.set_ylabel(y)
+    ax.grid(alpha=0.3)
+    ax.legend(frameon=False)
+    ax.set_title(title, fontsize=13, weight="bold")
+    fig.savefig(path, dpi=110, bbox_inches="tight")
+    plt.close(fig)

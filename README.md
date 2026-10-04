@@ -23,7 +23,8 @@ go, when, and for which service — and whether it is economically justified.
 | Phase 6 | Hyperlocal demand intelligence: real Bengaluru ward map, 5 analyses, heatmaps | ✅ |
 | Phase 7 | Supply intelligence: supply map, partner time states, idle supply vs reach | ✅ |
 | Phase 8 | Supply–demand imbalance: Marketplace Pressure Index, shortage types | ✅ |
-| Phase 9 | Forecasting: week-ahead demand, supply and pressure | In progress |
+| Phase 9 | Forecasting: week-ahead demand, supply and pressure | ✅ |
+| Phase 10 | City-scale repositioning optimization, tested fairly against the status quo | In progress |
 
 ## Results documents
 
@@ -39,6 +40,7 @@ Every result table is generated from data by a report script — never typed by 
 | `07_Supply_Intelligence/01_…05_*.md` | Supply map, partner time states, idle supply vs reach, empty km, vehicle eligibility | `python scripts/report_phase7.py` |
 | `08_Supply_Demand_Imbalance/01_…05_*.md` | Pressure Index (validated), pressure map, shortage types and their levers, service and rain pressure | `python scripts/report_phase8.py` |
 | `09_Forecasting/01_…04_*.md` | Forecast approach, demand and supply accuracy vs benchmark and noise floor, week-ahead shortage prediction | `python scripts/report_phase9.py` |
+| `10_Optimization/01_…05_*.md` | City optimizer design, policy comparison with 95% ranges, where gains come from, repositioning, value of supply | `python scripts/tune_policy.py`, then `python scripts/report_phase10.py` |
 
 ## Key findings so far (synthetic data, status-quo dispatch)
 
@@ -70,7 +72,7 @@ Data generation: `03_Data_Engineering/Data_Generation_Framework.md`
 ```bash
 pip install -r requirements-lock.txt   # exact tested versions (or requirements.txt)
 pip install -e .
-pytest                                 # 91 tests
+pytest                                 # 97 tests
 python scripts/run_toy.py              # toy optimizer
 python scripts/compare_policies.py     # optimizer vs baseline
 python scripts/bottlenecks.py          # marginal value of supply
