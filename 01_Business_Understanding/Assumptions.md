@@ -129,7 +129,7 @@ work completed so far.
 |----|------|--------------------|
 | X-01 | ~~Two baselines exist.~~ **Resolved in Phase 10:** every policy, including the status quo, is replayed through `optimization/simulation.py` with common random numbers; the status-quo replay reproduces the historical completion rates. | — |
 | X-02 | ~~Optimizer economics are still toy values.~~ **Resolved in Phase 10:** contribution per job is read from the warehouse (`10_Optimization/sql/05_economics_inputs.sql`, history weeks). | — |
-| X-03 | **Shortages may be on the strong side.** Office-zone evening ride completion is ~26% and partner utilization ~47%. | Report all uplift as a model-based estimate with ranges; revisit calibration if the Phase 5–8 dashboards look implausible. |
+| X-03 | **Shortages may be on the strong side.** Office-zone weekday-evening ride completion is ~21.5% and partner utilization ~47%. | **Addressed in Phases 10–11:** every uplift is reported as a model-based estimate with daily 95% ranges, settings were tuned on validation weeks only, and holdout results were simulated once. Calibration remains synthetic. |
 | X-04 | **One test range was widened.** After the fleet rose from 650 to 850, the citywide dinner-balance test changed from 0.8–1.3 to 0.6–1.1. | Justified by the simulation (effective capacity is lower than the planning ratio); recorded here for transparency. |
 
 ## 10. Known limitations

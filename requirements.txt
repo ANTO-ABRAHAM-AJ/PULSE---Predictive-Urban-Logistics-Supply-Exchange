@@ -8,6 +8,4 @@ pyodbc>=5.2        # SQL Server warehouse (Phase 4)
 geopandas>=1.0     # zone maps (Phase 6)
 matplotlib>=3.8    # maps and heatmaps (Phase 6)
 scikit-learn>=1.5  # forecasting models (Phase 9)
-
-# Added when their stage starts
-# scipy          # Stage 8 - statistical analysis
+scipy>=1.11        # 95% ranges for policy uplift (Phase 10)

@@ -58,8 +58,8 @@
 | Effective Capacity | Jobs the online, eligible supply could complete | `Σ eligible partner-hours × jobs per partner-hour` (Assumption O-01) |
 | Shortage | Demand that capacity cannot cover | `MAX(0, Demand − Effective Capacity)` |
 | Service Level | Share of demand completed | `Completed ÷ Demand` |
-| **Marketplace Pressure Index (MPI)** | Demand relative to capacity | `Demand ÷ Effective Capacity` (undefined if capacity = 0 → flagged) |
-| Pressure State | Classification of MPI | `Under-supplied` if MPI > 1.10 · `Balanced` if 0.80–1.10 · `Over-supplied` if < 0.80 (thresholds *illustrative*, reviewed in Phase 8) |
+| **Marketplace Pressure Index (MPI)** | Demand relative to capacity | `Demand ÷ Effective Capacity` (undefined if capacity = 0 → flagged). Implemented in Phase 8 as work hours (rides ÷ 2 + orders ÷ 3) ÷ partners present, per zone and hour |
+| Pressure State | Classification of MPI | `Under-supplied` if MPI > 1.10 · `Balanced` if 0.80–1.10 · `Over-supplied` if < 0.80 (thresholds validated in Phase 8: loss rates climb steeply above 1.10) |
 
 ## 5. Economics
 
