@@ -106,7 +106,8 @@ Expected demand per **Zone × Hour × Service** =
 | E-04 | **Contribution per unit** = platform revenue − partner payout − variable cost. Toy: `config/economics.yaml`. Bengaluru (Phase 10): platform revenue per completed job in the history weeks, read from the warehouse — about ₹27 per ride and ₹49 per order. |
 | E-05 | **Unserved penalty** = lost contribution proxy for future churn. It is a business judgement: Phase 10 reports ₹0 (profit policy) and ₹20 (service policy) and derives the break-even value. |
 | E-06 | **Repositioning cost** = per-km cost by vehicle type (fuel + partner time compensation): ₹6/km two-wheeler (equal to the food payout per km), ₹12/km cab. `config/bengaluru/policy.yaml`. |
-| E-07 | **Incentives** (Phase 11): extra online partner-hours supplied per ₹ of incentive follow a diminishing-returns curve. The curve is an assumption; results are reported across a range. |
+| E-07 | **Incentives** (Phase 11): modelled as a guaranteed-hour bonus — extra two-wheeler partners secured in a target zone-hour, paid whether or not they get jobs, additional to normal log-ins. The price needed to secure them is unknown, so programmes are tested at ₹40, ₹60 and ₹80 per partner-hour (`config/bengaluru/policy.yaml`). Diminishing returns emerge in the simulation: each extra partner in a zone-hour serves fewer new jobs than the last. |
+| E-08 | **Stress scenarios** (Phase 11): rain every day (D-08 and S-04 applied to dry days), festival evening (+40% demand 17:00–22:00), partner shortage (15% of partner-days lost), demand surge (+20%). Integer demand is scaled by binomial thinning or Poisson additions with a fixed seed. |
 
 ## 8. Planted truths for validation
 

@@ -199,3 +199,24 @@ def scatter_points(df: pd.DataFrame, x: str, y: str, label: str, title: str, pat
     ax.set_title(title, fontsize=13, weight="bold")
     fig.savefig(path, dpi=110, bbox_inches="tight")
     plt.close(fig)
+
+
+def grouped_bars(df: pd.DataFrame, category: str, group: str, value: str, title: str, path,
+                 ylabel: str, colors: dict | None = None) -> None:
+    """Bars for each category, one bar per group side by side."""
+    cats = list(dict.fromkeys(df[category]))
+    groups = list(dict.fromkeys(df[group]))
+    width = 0.8 / len(groups)
+    fig, ax = plt.subplots(figsize=(12, 5.5))
+    x = np.arange(len(cats))
+    for i, g in enumerate(groups):
+        vals = [float(df[(df[category] == c) & (df[group] == g)][value].sum()) for c in cats]
+        ax.bar(x + (i - (len(groups) - 1) / 2) * width, vals, width, label=g,
+               color=(colors or {}).get(g))
+    ax.set_xticks(x, [c.replace("_", " ") for c in cats])
+    ax.set_ylabel(ylabel)
+    ax.legend(frameon=False)
+    ax.grid(axis="y", alpha=0.3)
+    ax.set_title(title, fontsize=13, weight="bold")
+    fig.savefig(path, dpi=110, bbox_inches="tight")
+    plt.close(fig)

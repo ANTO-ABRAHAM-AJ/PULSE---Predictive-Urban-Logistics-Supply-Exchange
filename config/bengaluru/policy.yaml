@@ -17,3 +17,15 @@ scenarios:               # unserved penalty (INR per lost job) = value of a serv
   optimizer_perfect_forecast:  {penalty: 0,  forecast: actual}
 
 replay_seed: 2026        # common random numbers for every scenario (X-01)
+
+# ---------------------------------------------------------------- Phase 11
+incentives:                       # E-07: price to secure one extra partner-hour is uncertain
+  bonus_levels: [40, 60, 80]      # INR per guaranteed partner-hour, tested across this range
+  weekdays_only: true             # targets come from weekday shadow prices
+  max_partners_per_window: 6
+
+stress_scenarios:                 # applied to the replayed days before simulation
+  rain_every_day:   {type: rain, demand_multiplier: {mobility: 1.15, food: 1.30}, two_wheeler_supply_multiplier: 0.80}
+  festival_evening: {type: demand, multiplier: 1.40, hours: [17, 18, 19, 20, 21, 22]}
+  partner_shortage: {type: supply, keep_share: 0.85}
+  demand_surge:     {type: demand, multiplier: 1.20}

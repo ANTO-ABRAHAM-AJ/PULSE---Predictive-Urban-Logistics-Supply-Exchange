@@ -100,3 +100,13 @@ hour, zone and vehicle (`shadow_price`, INR for that hour; only positive values 
 **Fact_Repositioning** and **Fact_Supply_Allocation**, created empty in Phase 4,
 are filled by Phase 10 with every simulated move and every LP flow. All four are
 rebuilt by `scripts/report_phase10.py`; scenarios are defined in `config/bengaluru/policy.yaml`.
+
+**Agg_Scenario_Summary** (Phase 11) — one row per simulated study run (`study` =
+incentive or stress): requests, completed, lost jobs, revenue, repositioning cost,
+incentive partner-hours and cost, contribution.
+
+**Fact_Incentives**, created empty in Phase 4, is filled by Phase 11 with one row per
+incentive programme, weekday, zone and hour (`incentive_type` = guaranteed_hour;
+`service_key` = mobility because incentive partners are two-wheelers serving both
+services). Phase 11 also adds `incentive_*` scenarios to `Agg_Policy_ZoneHour`.
+Rebuilt by `scripts/report_phase11.py`.
