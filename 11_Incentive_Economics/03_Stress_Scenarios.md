@@ -112,8 +112,8 @@ With less idle supply to move, repositioning recovers a smaller share of losses
 than on a normal day.
 
 ### 8.4 Incentives are worth most under stress
-Each incentive partner-hour earns about twice as much on rain and festival days
-as on a normal day, because fewer of its jobs would have been served anyway.
+Each incentive partner-hour earns about 60% more on rain and festival days than
+on a normal day, because fewer of its jobs would have been served anyway.
 
 ---
 

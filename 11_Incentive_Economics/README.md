@@ -32,7 +32,8 @@ the same customers and orders.
 ## What PULSE recommends
 
 1. **Always run profit repositioning** — it serves more customers at no net cost (Phase 10).
-2. **Add service repositioning** if a lost customer is worth more than about ₹20.
+2. **Add service repositioning** if a lost customer is worth more than about ₹17–20
+   (the extra cost per extra job served, Phases 10 and 11).
 3. **Use incentives only as event-triggered measures** on rain and festival days,
    and only if partners can be secured for less than the break-even bonus in
    `03_Stress_Scenarios.md` — standing incentive programmes do not pay.

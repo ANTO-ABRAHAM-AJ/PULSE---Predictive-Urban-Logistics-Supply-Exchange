@@ -106,7 +106,7 @@ _Generated 2026-10-04 by a report script — do not edit by hand._
 | Lever | Compared with | Extra jobs served per day | Net cost per day (INR) | Net cost per extra job (INR) |
 |---|---|---|---|---|
 | Profit repositioning (Phase 10) | status quo | 122 | −₹205 | −₹2 |
-| Service repositioning, ₹20 goodwill (Phase 10) | status quo | 226 | ₹1,530 | ₹7 |
+| Service repositioning, ₹20 goodwill (Phase 10) | profit repositioning | 104 | ₹1,735 | ₹17 |
 | Incentives at ₹40 per partner-hour | profit repositioning | 344 | ₹16,905 | ₹49 |
 | Incentives at ₹60 per partner-hour | profit repositioning | 257 | ₹11,100 | ₹43 |
 | Incentives at ₹80 per partner-hour | profit repositioning | 199 | ₹11,011 | ₹55 |

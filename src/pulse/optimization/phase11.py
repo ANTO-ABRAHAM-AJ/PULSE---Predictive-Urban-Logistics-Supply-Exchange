@@ -109,10 +109,10 @@ def ladder(inc: pd.DataFrame, phase10: dict | None = None) -> pd.DataFrame:
     rows = [{"Lever": "Profit repositioning (Phase 10)", "Compared with": "status quo",
              "Extra jobs served per day": (sq["lost_no_partner"] - prof["lost_no_partner"]) / days,
              "Net cost per day (INR)": (sq["contribution"] - prof["contribution"]) / days}]
-    if phase10:
-        rows.append({"Lever": "Service repositioning, ₹20 goodwill (Phase 10)", "Compared with": "status quo",
-                     "Extra jobs served per day": phase10["extra_jobs_per_day"],
-                     "Net cost per day (INR)": -phase10["uplift_per_day"]})
+    if phase10:                                   # incremental over profit repositioning, like the incentives
+        rows.append({"Lever": "Service repositioning, ₹20 goodwill (Phase 10)", "Compared with": "profit repositioning",
+                     "Extra jobs served per day": phase10["extra_jobs_per_day"] - rows[0]["Extra jobs served per day"],
+                     "Net cost per day (INR)": -phase10["uplift_per_day"] - rows[0]["Net cost per day (INR)"]})
     for code, r in i.iterrows():
         if code.startswith("incentive_"):
             rows.append({"Lever": f"Incentives at ₹{int(r['bonus'])} per partner-hour", "Compared with": "profit repositioning",
