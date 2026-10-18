@@ -9,9 +9,9 @@ section is independent; do them in this order the first time.
 | 2 | Map metric switch | Page 3 |
 | 3 | What-if sliders: job value, bonus | Pages 7, 9 |
 | 4 | Drillthrough to Zone Detail | Every zone visual |
-| 5 | Report-page tooltips | Every map and zone visual |
-| 6 | Bookmarks: how-to-read overlays, reset, story mode | Every page |
-| 7 | Navigation: page navigator, finding buttons | Every page |
+| 5 | Tooltip fields | Maps and zone bars |
+| 6 | Bookmarks: Reset buttons | Pages 7, 9 |
+| 7 | Navigation: page navigator | Every page |
 | 8 | Play axis animation | Page 4 |
 | 9 | Colours driven by data | Pages 7, 9, 10 |
 | 10 | Sync slicers, edit interactions | Pages 2–9 |
@@ -125,67 +125,40 @@ well as well if Power BI does not offer it.
 
 ---
 
-## 5. Report-page tooltips
+## 5. Tooltip fields
 
-1. Zone Tooltip page → Format page → **Page information → Allow use as tooltip** on;
-   **Canvas settings → Type: Tooltip** (320 × 240).
-2. Build it (03, last section). Hide the page.
-3. On each map and zone visual: Format → General → **Tooltips → Type: Report
-   page → Page: Zone Tooltip**.
+Drag measures into each zone visual's **Tooltips** well (Build pane), and set
+Format → General → Tooltips → Type **Default**, background `#111A27`.
+The fields per visual are listed in `03_Report_Pages.md` (last section).
 
-Hovering a zone now shows its mini dashboard with an hourly sparkline. If the
-Shape Map in your version shows only default tooltips, the tooltip page still
-works on the matrices, tables and bar charts.
+A report-page tooltip (a hidden 320 × 240 page) was tried first and dropped:
+it was too cramped to read, and the Shape Map (a preview visual) does not show
+report-page tooltips reliably.
 
 ---
 
-## 6. Bookmarks
+## 6. Bookmarks: Reset buttons
 
-Open **View → Bookmarks** and **View → Selection**.
+Open **View → Bookmarks**.
 
-### 6.1 "How to read this page" overlay (every page)
+1. Put the page in its default state (page 7: Job Value 20, policy Profit;
+   page 9: Bonus 60).
+2. Bookmarks → **Add**; name it "Reset – Policy Simulator" / "Reset – Incentives";
+   in its **…** menu keep *Data*, *Display* and *Current page* ticked.
+3. Insert → Buttons → **Reset**; Format → Action **On**, Type *Bookmark*, pick
+   the bookmark.
 
-1. Add a rectangle (`#0B1220`, 10% transparency) covering the page, and on it a
-   text box with three lines: what the page shows, how to interact, the one
-   finding. Group them as **Info overlay**.
-2. Selection pane: show the overlay → bookmark **"<Page> – how to read"**
-   (options: uncheck *Data*, check *Display*, *Selected visuals*: the overlay
-   only).
-3. Hide the overlay → bookmark **"<Page> – hide help"** (same options).
-4. Info button → Action → Bookmark "<Page> – how to read"; add a "Close"
-   button on the overlay → Action → Bookmark "<Page> – hide help".
-
-### 6.2 Reset
-
-Set every slicer to its default → bookmark **"<Page> – reset"** with *Data* on
-and *Current page* on. Reset button → that bookmark.
-
-### 6.3 Story mode (for the interview)
-
-Create six bookmarks, in order, each on its page with the slicers set:
-
-| # | Bookmark | Page | State |
-|---|---|---|---|
-| 1 | The problem | Command Center | Service = all |
-| 2 | Where supply is | Supply & Idle Partners | Play axis at 19 |
-| 3 | What kind of shortage | Pressure Index | Shortage donut, Reposition ahead selected |
-| 4 | Seen a week ahead | Forecast & Early Warning | Model = GBM + rain |
-| 5 | The decision | Policy Simulator | Job value = ₹20 |
-| 6 | When to pay | Incentives & Stress Tests | Bonus = ₹25 |
-
-Group them as **Story**. In the Bookmarks pane, **View** runs them as a
-slideshow; or add Insert → Buttons → Navigator → **Bookmark navigator** on
-page 1 (group Story) so a viewer can click through the story.
+A bookmark is a snapshot taken when you click *Add*. Note that bookmarks do not
+store a play-axis position, so the page 4 scatter always reopens at the last
+hour; press play live instead.
 
 ---
 
 ## 7. Navigation
 
-- **Page navigator** (shared layout): updates itself when pages are added,
-  renamed or hidden.
-- **Finding buttons** on page 1: Insert → Buttons → Blank, icon "→", Action
-  *Page navigation*, destination pages 4, 6, 7, 9. Tooltip text: "Open the
-  evidence".
+- **Page navigator** in the left rail of every page (Insert → Buttons →
+  Navigator → Page navigator, vertical). It updates itself when pages are
+  added, renamed or hidden, and leaves out the hidden Zone Detail page.
 - Ctrl+click follows buttons in Desktop; plain click in the service and PDF.
 
 ---
@@ -218,10 +191,13 @@ series).
 
 ## 10. Sync slicers and edit interactions
 
-- **View → Sync slicers**: sync `period`, `service_name`, `day_type` and
-  `zone_type` across pages 2–5 (observed data). Do **not** sync them to pages 6–9,
-  which use the holdout or simulated data.
-- Page 7 and 9 sliders: interactions → None on the line charts (section 3).
+- The service slicer appears on pages 1–6 only. Pages 7–10 use simulated
+  policy and stress-test results, which have no service split.
+- Page 7 and 9 sliders: interactions → None on the line charts (section 3);
+  the page 7 Job Value slider also → None on the scorecard table.
+- Page 7 policy tiles: interactions → None on the line chart, table and card,
+  so they drive only the zone bar chart.
+- Page 5 day-type tiles: interactions → None on the cards, donut and bar.
 - Page 6 model slicer: interactions → None on the WAPE-by-model bar chart.
 
 ---
@@ -234,5 +210,5 @@ series).
 2. Save the report as `12_PowerBI/PULSE_Command_Center.pbix`.
 3. **File → Export → Export to PDF** → `12_PowerBI/PULSE_Command_Center.pdf`, so
    readers without Power BI can see every page.
-4. Screenshot each page in reading view (View → Fit to page, then hide the
-   panes) into `12_PowerBI/images/pages/` with the names listed in the README.
+4. Screenshot each page (View → Fit to page, panes collapsed) into
+   `12_PowerBI/images/pages/` with the names listed in the README.

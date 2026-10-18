@@ -262,7 +262,7 @@ MEASURE '_Measures'[Incentive Net per Day at Bonus] =
                  Stress_Cases[days] ) )
 MEASURE '_Measures'[Stress Cases Paying at Bonus] =
     VAR b = [Selected Bonus]
-    RETURN COUNTROWS ( FILTER ( Stress_Cases, [Break-even Bonus] >= b ) )
+    RETURN COUNTROWS ( FILTER ( Stress_Cases, [Break-even Bonus] >= b ) ) + 0
 MEASURE '_Measures'[Bonus Pays Colour] =
     IF ( [Break-even Bonus] >= [Selected Bonus], "#34D399", "#F87171" )
 
@@ -297,9 +297,11 @@ MEASURE '_Measures'[Headline Incentives] =
     RETURN "Bonuses recover jobs at " & UNICHAR ( 8377 ) & FORMAT ( c, "0" ) & " each; they pay only below "
         & UNICHAR ( 8377 ) & FORMAT ( n, "0" ) & "/hour on a normal day, " & UNICHAR ( 8377 ) & FORMAT ( f, "0" ) & " on festival evenings."
 MEASURE '_Measures'[Zone Headline] =
-    SELECTEDVALUE ( Dim_Zone[zone_label] ) & " loses " & FORMAT ( [Lost Jobs per Day], "#,0" )
-        & " jobs a day; " & FORMAT ( [Reposition-Ahead Share of Lost %], "0%" )
-        & " could be fixed by moving partners in time."
+    IF ( HASONEVALUE ( Dim_Zone[zone_label] ),
+        SELECTEDVALUE ( Dim_Zone[zone_label] ) & " loses " & FORMAT ( [Lost Jobs per Day], "#,0" )
+            & " jobs a day; for " & FORMAT ( [Reposition-Ahead Share of Lost %], "0%" )
+            & " of them, spare partners were elsewhere in the city.",
+        "All zones. Right-click a zone on any page, then Drill through > Zone Detail." )
 MEASURE '_Measures'[Zone Playbook] =
     VAR ahead = [Reposition-Ahead Share of Lost %]
     VAR city  = [Citywide Share of Lost %]

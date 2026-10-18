@@ -17,10 +17,11 @@ what price.
 | **Bonus what-if** | Slide the bonus per partner-hour; see in which situations a bonus pays |
 | **Play axis** | Press play to watch partners and lost jobs move through the day |
 | **Drillthrough** | Right-click any zone → a full page about that zone |
-| **Tooltip pages** | Hover a zone → a mini dashboard with its hourly profile |
-| **AI visuals** | Decomposition tree for lost jobs; key influencers for under-supply |
-| **Story mode** | Six bookmarks walk through the findings like a slide deck |
+| **Rich tooltips** | Hover a zone → lost jobs, completion, pressure index and its playbook action |
+| **AI visual** | Decomposition tree: click + to find where lost jobs come from |
+| **Page navigator + Reset buttons** | One-click navigation; sliders snap back to their defaults |
 | **Dynamic headlines** | Sentences on page 1 and the zone page are measures, so they follow the filters |
+| **Data-driven colours** | Bars turn green when a bonus pays; every zone's action is colour-coded |
 
 ## Pages
 
@@ -37,7 +38,7 @@ what price.
 | 9 | Incentives & Stress Tests | ![](./images/pages/09_incentives_stress_tests.png) |
 | 10 | Decision Playbook | ![](./images/pages/10_decision_playbook.png) |
 | — | Zone Detail (drillthrough) | ![](./images/pages/11_zone_detail.png) |
-| — | Zone Tooltip | ![](./images/pages/12_zone_tooltip.png) |
+| — | Tooltip on hover | ![](./images/pages/12_zone_tooltip.png) |
 
 ## Documents
 
@@ -57,8 +58,9 @@ what price.
 | `dax/PULSE_measures.dax` | All measures, created in one step from DAX query view, plus their checks |
 | `map/bengaluru_zones.json` | The 24 zones for the Shape Map (generated) |
 | `theme/PULSE_Command_Center.json` | Dark report theme |
-| `PULSE_Command_Center.pbix` | The report |
-| `PULSE_Command_Center.pdf` | Every page, for readers without Power BI |
+| `PULSE_Command_Center.pbix` | The report (Power BI Desktop; Import mode, about 9 MB). To refresh it, point the SQL Server source at your own `PULSE_DW` |
+| `PULSE_Command_Center.pdf` | All 10 pages, for readers without Power BI |
+| `images/pages/` | Page screenshots (pages 1–10 rendered from the PDF; Zone Detail drilled to KIA; a tooltip on hover) |
 
 ## Build order
 

@@ -28,7 +28,7 @@ go, when, and for which service — and whether it is economically justified.
 | Phase 9 | Forecasting: week-ahead demand, supply and pressure | ✅ |
 | Phase 10 | City-scale repositioning optimization, tested fairly against the status quo | ✅ |
 | Phase 11 | Incentive economics and stress scenarios | ✅ |
-| Phase 12 | Power BI command center: SQL semantic layer, 146 DAX measures proved against SQL, 10 interactive pages | In progress |
+| Phase 12 | Power BI command center: SQL semantic layer, 148 DAX measures (30 proved against SQL), 10 interactive pages plus a drillthrough page | ✅ |
 
 Stages 0–5 built and validated the optimizer core and the synthetic city; they
 correspond to the early part of Phases 3 and 10.
