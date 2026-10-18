@@ -1,0 +1,381 @@
+// =========================================================================
+// PULSE Phase 12 - every DAX measure in the report, in one DAX query.
+//
+// How to use (Power BI Desktop, DAX query view):
+//   1. Paste this whole file into a new DAX query tab.
+//   2. Click "Update model with changes" (top of the editor): every measure
+//      below is created in the _Measures table in one step.
+//   3. Run the query (F5). The EVALUATE at the bottom returns 30 check rows;
+//      column "DAX value" must equal "SQL value" from
+//      12_PowerBI/sql/01_dashboard_checks.sql (Result Set A) to 2 decimals.
+//
+// Needs, before step 2: the 19 pbi tables loaded and renamed (no "pbi "
+// prefix), the empty _Measures table, the two what-if parameters
+// 'Job Value' and 'Bonus', and the 'Map Metric' table (01_Data_Model.md).
+//
+// Rule: every rate is SUM(numerator) / SUM(denominator), never an average
+// of stored rates (KPI_Dictionary.md rule 4).
+// =========================================================================
+DEFINE
+
+// ---------------------------------------------------------- 0 Calendar
+MEASURE '_Measures'[Days] =
+    CALCULATE ( DISTINCTCOUNT ( Dim_Time[date_value] ), KEEPFILTERS ( Dim_Time[data_split] <> "spill" ) )
+MEASURE '_Measures'[Hours] =
+    CALCULATE ( COUNTROWS ( Dim_Time ), KEEPFILTERS ( Dim_Time[data_split] <> "spill" ) )
+MEASURE '_Measures'[Holdout Days] =
+    CALCULATE ( [Days], Dim_Time[data_split] = "holdout" )
+MEASURE '_Measures'[Holdout Weekdays] =
+    CALCULATE ( [Days], Dim_Time[data_split] = "holdout", Dim_Time[day_type] = "Weekday" )
+
+// ---------------------------------------------------------- 1 Marketplace (Phase 5)
+MEASURE '_Measures'[Demand] = SUM ( Fact_Marketplace[demand] )
+MEASURE '_Measures'[Completed Jobs] = SUM ( Fact_Marketplace[completed] )
+MEASURE '_Measures'[Lost Jobs] = SUM ( Fact_Marketplace[lost_no_partner] )
+MEASURE '_Measures'[Customer Cancels] = SUM ( Fact_Marketplace[cancelled_customer] )
+MEASURE '_Measures'[Completion %] = DIVIDE ( [Completed Jobs], [Demand] )
+MEASURE '_Measures'[Lost to No Partner %] = DIVIDE ( [Lost Jobs], [Demand] )
+MEASURE '_Measures'[Customer Cancel %] = DIVIDE ( [Customer Cancels], [Demand] )
+MEASURE '_Measures'[Platform Revenue] = SUM ( Fact_Marketplace[platform_revenue] )
+MEASURE '_Measures'[Gross Value] = SUM ( Fact_Marketplace[gross_value] )
+MEASURE '_Measures'[Partner Payout] = SUM ( Fact_Marketplace[partner_payout] )
+MEASURE '_Measures'[Take Rate %] = DIVIDE ( [Platform Revenue], [Gross Value] )
+MEASURE '_Measures'[Revenue per Completed Job] = DIVIDE ( [Platform Revenue], [Completed Jobs] )
+MEASURE '_Measures'[Demand per Day] = DIVIDE ( [Demand], [Days] )
+MEASURE '_Measures'[Completed per Day] = DIVIDE ( [Completed Jobs], [Days] )
+MEASURE '_Measures'[Lost Jobs per Day] = DIVIDE ( [Lost Jobs], [Days] )
+MEASURE '_Measures'[Revenue per Day] = DIVIDE ( [Platform Revenue], [Days] )
+MEASURE '_Measures'[Ride Completion %] =
+    CALCULATE ( [Completion %], Dim_Service[service_code] = "mobility" )
+MEASURE '_Measures'[Food Delivered %] =
+    CALCULATE ( [Completion %], Dim_Service[service_code] = "food" )
+MEASURE '_Measures'[Rides Lost to No Partner %] =
+    CALCULATE ( [Lost to No Partner %], Dim_Service[service_code] = "mobility" )
+MEASURE '_Measures'[Avg Pickup ETA (min)] =
+    CALCULATE ( DIVIDE ( SUM ( Fact_Marketplace[wait_min_sum] ), [Completed Jobs] ), Dim_Service[service_code] = "mobility" )
+MEASURE '_Measures'[Avg Order-to-Door (min)] =
+    CALCULATE ( DIVIDE ( SUM ( Fact_Marketplace[wait_min_sum] ), [Completed Jobs] ), Dim_Service[service_code] = "food" )
+MEASURE '_Measures'[Rain Demand Uplift %] =
+    DIVIDE ( CALCULATE ( [Demand per Day], Dim_Time[weather] = "Rain day" ),
+             CALCULATE ( [Demand per Day], Dim_Time[weather] = "Dry day" ) ) - 1
+
+// ---------------------------------------------------------- 2 Supply (Phase 7)
+MEASURE '_Measures'[Online Partner-Hours] = SUM ( Fact_Supply[partner_hours] )
+MEASURE '_Measures'[Avg Partners Online] = DIVIDE ( [Online Partner-Hours], [Hours] )
+MEASURE '_Measures'[Utilization %] = DIVIDE ( SUM ( Fact_Supply[busy_hours] ), SUM ( Fact_Supply[online_hours] ) )
+MEASURE '_Measures'[Idle %] = DIVIDE ( SUM ( Fact_Supply[idle_hours] ), SUM ( Fact_Supply[online_hours] ) )
+MEASURE '_Measures'[Idle Partner-Hours per Day] = DIVIDE ( SUM ( Fact_Supply[idle_hours] ), [Days] )
+MEASURE '_Measures'[Empty km per Busy Hour] = DIVIDE ( SUM ( Fact_Supply[empty_km] ), SUM ( Fact_Supply[busy_hours] ) )
+MEASURE '_Measures'[Share of City Supply %] =
+    DIVIDE ( [Online Partner-Hours], CALCULATE ( [Online Partner-Hours], REMOVEFILTERS ( Dim_Zone ) ) )
+
+// ---------------------------------------------------------- 3 Pressure (Phase 8)
+MEASURE '_Measures'[Work Hours] = SUM ( Fact_Pressure[work_hours] )
+MEASURE '_Measures'[Supply Hours] = SUM ( Fact_Pressure[supply_hours] )
+MEASURE '_Measures'[MPI] = DIVIDE ( [Work Hours], [Supply Hours] )
+MEASURE '_Measures'[Neighbourhood MPI] =
+    DIVIDE ( SUM ( Fact_Pressure[nbhd_work_hours] ), SUM ( Fact_Pressure[nbhd_supply_hours] ) )
+MEASURE '_Measures'[City MPI] = CALCULATE ( [MPI], REMOVEFILTERS ( Dim_Zone ) )
+MEASURE '_Measures'[Zone-Hours] = COUNTROWS ( Fact_Pressure )
+MEASURE '_Measures'[Under-supplied Zone-Hours] = SUM ( Fact_Pressure[is_under_supplied] )
+MEASURE '_Measures'[Under-supplied Zone-Hours %] = DIVIDE ( [Under-supplied Zone-Hours], [Zone-Hours] )
+MEASURE '_Measures'[Pressure Lost Jobs] = SUM ( Fact_Pressure[lost_jobs] )
+MEASURE '_Measures'[Pressure Lost Jobs per Day] = DIVIDE ( [Pressure Lost Jobs], [Days] )
+MEASURE '_Measures'[Share of Lost Jobs %] =
+    DIVIDE (
+        [Pressure Lost Jobs],
+        CALCULATE ( [Pressure Lost Jobs],
+            REMOVEFILTERS ( Fact_Pressure[shortage_type], Fact_Pressure[shortage_type_sort], Fact_Pressure[lever] ) )
+    )
+MEASURE '_Measures'[Reposition-Ahead Share of Lost %] =
+    CALCULATE ( [Share of Lost Jobs %], Fact_Pressure[shortage_type] = "Reposition ahead" )
+MEASURE '_Measures'[Citywide Share of Lost %] =
+    CALCULATE ( [Share of Lost Jobs %], Fact_Pressure[shortage_type] = "Citywide shortage" )
+MEASURE '_Measures'[Pressure State] =
+    VAR m = [MPI]
+    RETURN SWITCH ( TRUE (), ISBLANK ( m ), "No supply", m > 1.10, "Under-supplied", m < 0.80, "Over-supplied", "Balanced" )
+MEASURE '_Measures'[Pressure Colour] =
+    VAR m = [MPI]
+    RETURN SWITCH ( TRUE (), ISBLANK ( m ), "#334155", m > 1.10, "#F87171", m < 0.80, "#2DD4BF", "#FBBF24" )
+
+// ---------------------------------------------------------- 4 Forecast (Phase 9, holdout)
+MEASURE '_Measures'[Forecast Demand] = SUM ( Fact_Demand_Forecast[forecast_demand] )
+MEASURE '_Measures'[Actual Demand] =
+    CALCULATE ( SUM ( Fact_Demand_Forecast[actual_demand] ),
+        REMOVEFILTERS ( Dim_Forecast_Model ), Dim_Forecast_Model[model_name] = "Seasonal naive" )
+MEASURE '_Measures'[WAPE %] =
+    DIVIDE ( SUM ( Fact_Demand_Forecast[abs_error] ), SUM ( Fact_Demand_Forecast[actual_demand] ) )
+MEASURE '_Measures'[Forecast Bias %] =
+    DIVIDE ( [Forecast Demand] - SUM ( Fact_Demand_Forecast[actual_demand] ), SUM ( Fact_Demand_Forecast[actual_demand] ) )
+MEASURE '_Measures'[Skill vs Seasonal Naive %] =
+    VAR naive = CALCULATE ( [WAPE %], REMOVEFILTERS ( Dim_Forecast_Model ), Dim_Forecast_Model[model_name] = "Seasonal naive" )
+    RETURN 1 - DIVIDE ( [WAPE %], naive )
+MEASURE '_Measures'[Flagged Zone-Hours] = SUM ( Fact_Pressure_Forecast[predicted_short] )
+MEASURE '_Measures'[Short Zone-Hours] = SUM ( Fact_Pressure_Forecast[actual_short] )
+MEASURE '_Measures'[Correct Warnings] =
+    CALCULATE ( COUNTROWS ( Fact_Pressure_Forecast ), Fact_Pressure_Forecast[outcome] = "Correct warning" )
+MEASURE '_Measures'[Flag Rate %] = DIVIDE ( [Flagged Zone-Hours], COUNTROWS ( Fact_Pressure_Forecast ) )
+MEASURE '_Measures'[Precision %] = DIVIDE ( [Correct Warnings], [Flagged Zone-Hours] )
+MEASURE '_Measures'[Recall %] = DIVIDE ( [Correct Warnings], [Short Zone-Hours] )
+MEASURE '_Measures'[Lost Jobs Captured %] =
+    DIVIDE ( CALCULATE ( SUM ( Fact_Pressure_Forecast[lost_jobs] ), Fact_Pressure_Forecast[predicted_short] = 1 ),
+             SUM ( Fact_Pressure_Forecast[lost_jobs] ) )
+MEASURE '_Measures'[Warning Zone-Hours] = COUNTROWS ( Fact_Pressure_Forecast )
+MEASURE '_Measures'[Warning Lost Jobs] = SUM ( Fact_Pressure_Forecast[lost_jobs] )
+MEASURE '_Measures'[Share of Warning Lost Jobs %] =
+    DIVIDE ( [Warning Lost Jobs],
+             CALCULATE ( [Warning Lost Jobs],
+                 REMOVEFILTERS ( Fact_Pressure_Forecast[outcome], Fact_Pressure_Forecast[outcome_sort] ) ) )
+
+// ---------------------------------------------------------- 5 Policy outcomes (Phases 10-11, zone x hour)
+MEASURE '_Measures'[Scenario Requests] = SUM ( Fact_Policy[requests] )
+MEASURE '_Measures'[Scenario Completed] = SUM ( Fact_Policy[completed] )
+MEASURE '_Measures'[Scenario Lost Jobs] = SUM ( Fact_Policy[lost_no_partner] )
+MEASURE '_Measures'[Scenario Revenue] = SUM ( Fact_Policy[revenue] )
+MEASURE '_Measures'[Scenario Completion %] = DIVIDE ( [Scenario Completed], [Scenario Requests] )
+MEASURE '_Measures'[Scenario Ride Completion %] =
+    CALCULATE ( [Scenario Completion %], Dim_Service[service_code] = "mobility" )
+MEASURE '_Measures'[Scenario Food Delivered %] =
+    CALCULATE ( [Scenario Completion %], Dim_Service[service_code] = "food" )
+MEASURE '_Measures'[Scenario Lost Jobs per Day] = DIVIDE ( [Scenario Lost Jobs], [Holdout Days] )
+MEASURE '_Measures'[Status Quo Lost Jobs] =
+    CALCULATE ( [Scenario Lost Jobs], REMOVEFILTERS ( Dim_Scenario ), Dim_Scenario[scenario_code] = "status_quo" )
+MEASURE '_Measures'[Status Quo Completed] =
+    CALCULATE ( [Scenario Completed], REMOVEFILTERS ( Dim_Scenario ), Dim_Scenario[scenario_code] = "status_quo" )
+MEASURE '_Measures'[Lost Jobs vs Status Quo %] =
+    DIVIDE ( [Scenario Lost Jobs] - [Status Quo Lost Jobs], [Status Quo Lost Jobs] )
+MEASURE '_Measures'[Jobs Recovered %] =
+    DIVIDE ( [Status Quo Lost Jobs] - [Scenario Lost Jobs], [Status Quo Lost Jobs] )
+MEASURE '_Measures'[Extra Completed Jobs per Day] =
+    DIVIDE ( [Scenario Completed] - [Status Quo Completed], [Holdout Days] )
+MEASURE '_Measures'[Revenue Gain vs Profit Policy] =
+    [Scenario Revenue]
+        - CALCULATE ( [Scenario Revenue], REMOVEFILTERS ( Dim_Scenario ), Dim_Scenario[scenario_code] = "optimizer_profit" )
+
+// ---------------------------------------------------------- 6 Repositioning and value of supply (Phase 10)
+MEASURE '_Measures'[Moves] = SUM ( Fact_Repositioning[moves] )
+MEASURE '_Measures'[Moves per Day] = DIVIDE ( [Moves], [Holdout Days] )
+MEASURE '_Measures'[Move Cost] = SUM ( Fact_Repositioning[reposition_cost] )
+MEASURE '_Measures'[Move Cost per Day] = DIVIDE ( [Move Cost], [Holdout Days] )
+MEASURE '_Measures'[Avg Move km] = DIVIDE ( SUM ( Fact_Repositioning[reposition_km] ), [Moves] )
+MEASURE '_Measures'[Avg Move (min)] = DIVIDE ( SUM ( Fact_Repositioning[reposition_minutes] ), [Moves] )
+MEASURE '_Measures'[Moves In] =
+    CALCULATE ( [Moves], REMOVEFILTERS ( Dim_Zone ),
+        TREATAS ( VALUES ( Dim_Zone[zone_key] ), Dim_Destination_Zone[dest_zone_key] ) )
+MEASURE '_Measures'[Net Partners Moved In per Day] = DIVIDE ( [Moves In] - [Moves], [Holdout Days] )
+MEASURE '_Measures'[Value of One More Partner-Hour] =
+    VAR v = CALCULATE ( SUM ( Fact_Supply_Value[shadow_price] ),
+                REMOVEFILTERS ( Dim_Scenario ), Dim_Scenario[scenario_code] = "optimizer_profit",
+                Dim_Time[day_type] = "Weekday" )
+    VAR hrs = [Holdout Weekdays] * COUNTROWS ( VALUES ( Dim_Time[hour_of_day] ) )
+    RETURN DIVIDE ( v, hrs )
+MEASURE '_Measures'[Value of One More Two-Wheeler] =
+    CALCULATE ( [Value of One More Partner-Hour], Dim_Vehicle[vehicle_code] = "two_wheeler" )
+
+// ---------------------------------------------------------- 7 Incentive programmes by zone (Phase 11)
+MEASURE '_Measures'[Incentive Cost] = SUM ( Fact_Incentives[incentive_cost] )
+MEASURE '_Measures'[Incentive Partner-Hours] = SUM ( Fact_Incentives[incentive_partner_hours] )
+MEASURE '_Measures'[Incentive Partner-Hours per Day] = DIVIDE ( [Incentive Partner-Hours], [Holdout Days] )
+MEASURE '_Measures'[Incentive Cost per Day] = DIVIDE ( [Incentive Cost], [Holdout Days] )
+MEASURE '_Measures'[Revenue per Rupee of Incentive] = DIVIDE ( [Revenue Gain vs Profit Policy], [Incentive Cost] )
+MEASURE '_Measures'[Revenue Gain vs Profit per Day] = DIVIDE ( [Revenue Gain vs Profit Policy], [Holdout Days] )
+
+// ---------------------------------------------------------- 8 Scenario economics (whole holdout)
+MEASURE '_Measures'[Scenario Days] = MAX ( Fact_Scenario_Economics[days] )
+MEASURE '_Measures'[Contribution] = SUM ( Fact_Scenario_Economics[contribution] )
+MEASURE '_Measures'[Contribution per Day] = DIVIDE ( [Contribution], [Scenario Days] )
+MEASURE '_Measures'[Econ Revenue] = SUM ( Fact_Scenario_Economics[revenue] )
+MEASURE '_Measures'[Econ Repositioning Cost] = SUM ( Fact_Scenario_Economics[reposition_cost] )
+MEASURE '_Measures'[Econ Incentive Cost] = SUM ( Fact_Scenario_Economics[incentive_cost] )
+MEASURE '_Measures'[Econ Completed] = SUM ( Fact_Scenario_Economics[completed] )
+MEASURE '_Measures'[Econ Lost Jobs] = SUM ( Fact_Scenario_Economics[lost_no_partner] )
+MEASURE '_Measures'[Econ Moves per Day] = DIVIDE ( SUM ( Fact_Scenario_Economics[moves] ), [Scenario Days] )
+MEASURE '_Measures'[SQ Contribution] =
+    CALCULATE ( [Contribution], REMOVEFILTERS ( Dim_Scenario ), Dim_Scenario[scenario_code] = "status_quo" )
+MEASURE '_Measures'[SQ Econ Completed] =
+    CALCULATE ( [Econ Completed], REMOVEFILTERS ( Dim_Scenario ), Dim_Scenario[scenario_code] = "status_quo" )
+MEASURE '_Measures'[SQ Econ Lost Jobs] =
+    CALCULATE ( [Econ Lost Jobs], REMOVEFILTERS ( Dim_Scenario ), Dim_Scenario[scenario_code] = "status_quo" )
+MEASURE '_Measures'[Profit Contribution] =
+    CALCULATE ( [Contribution], REMOVEFILTERS ( Dim_Scenario ), Dim_Scenario[scenario_code] = "optimizer_profit" )
+MEASURE '_Measures'[Profit Econ Completed] =
+    CALCULATE ( [Econ Completed], REMOVEFILTERS ( Dim_Scenario ), Dim_Scenario[scenario_code] = "optimizer_profit" )
+MEASURE '_Measures'[Profit Econ Lost Jobs] =
+    CALCULATE ( [Econ Lost Jobs], REMOVEFILTERS ( Dim_Scenario ), Dim_Scenario[scenario_code] = "optimizer_profit" )
+MEASURE '_Measures'[Contribution Change vs SQ %] = DIVIDE ( [Contribution] - [SQ Contribution], [SQ Contribution] )
+MEASURE '_Measures'[Contribution Uplift per Day] = DIVIDE ( [Contribution] - [SQ Contribution], [Scenario Days] )
+MEASURE '_Measures'[Econ Lost Jobs vs SQ %] = DIVIDE ( [Econ Lost Jobs] - [SQ Econ Lost Jobs], [SQ Econ Lost Jobs] )
+MEASURE '_Measures'[Econ Extra Completed per Day] = DIVIDE ( [Econ Completed] - [SQ Econ Completed], [Scenario Days] )
+MEASURE '_Measures'[Net vs Profit per Day] = DIVIDE ( [Contribution] - [Profit Contribution], [Scenario Days] )
+MEASURE '_Measures'[Jobs Recovered per Day vs Profit] = DIVIDE ( [Profit Econ Lost Jobs] - [Econ Lost Jobs], [Scenario Days] )
+MEASURE '_Measures'[Net Cost per Recovered Job] =
+    DIVIDE ( [Profit Contribution] - [Contribution], [Profit Econ Lost Jobs] - [Econ Lost Jobs] )
+// only meaningful when the policy costs more than profit AND completes more jobs; blank otherwise
+MEASURE '_Measures'[Break-even Job Value] =
+    VAR cost = [Profit Contribution] - [Contribution]
+    VAR extra = [Econ Completed] - [Profit Econ Completed]
+    RETURN IF ( cost > 0 && extra > 0, DIVIDE ( cost, extra ) )
+
+// ---------------------------------------------------------- 9 What-if: value of a completed job
+MEASURE '_Measures'[Selected Job Value] = SELECTEDVALUE ( 'Job Value'[Job Value], 20 )
+MEASURE '_Measures'[Value-Adjusted Gain per Day] =
+    [Contribution Uplift per Day] + [Selected Job Value] * [Econ Extra Completed per Day]
+MEASURE '_Measures'[Best Lever at Job Value] =
+    VAR t = ADDCOLUMNS ( FILTER ( ALL ( Dim_Scenario ), Dim_Scenario[is_actionable] = 1 ),
+                         "@gain", [Value-Adjusted Gain per Day] )
+    RETURN MAXX ( TOPN ( 1, t, [@gain], DESC ), Dim_Scenario[scenario_name] )
+MEASURE '_Measures'[Best Lever Gain per Day] =
+    VAR t = ADDCOLUMNS ( FILTER ( ALL ( Dim_Scenario ), Dim_Scenario[is_actionable] = 1 ),
+                         "@gain", [Value-Adjusted Gain per Day] )
+    RETURN MAXX ( t, [@gain] )
+// page 7 line chart: blank for status quo / perfect forecast, so only real levers are drawn
+MEASURE '_Measures'[Actionable Gain per Day] =
+    IF ( MAX ( Dim_Scenario[is_actionable] ) = 1, [Value-Adjusted Gain per Day] )
+// same number, named for the card's reference label (the new card shows the field name)
+MEASURE '_Measures'[Gain per day vs status quo] = [Best Lever Gain per Day]
+MEASURE '_Measures'[Best Lever Title] =
+    "Best lever when a completed job is worth " & UNICHAR ( 8377 ) & FORMAT ( [Selected Job Value], "#,0" )
+
+// ---------------------------------------------------------- 10 Stress tests and the bonus what-if
+MEASURE '_Measures'[Selected Bonus] = SELECTEDVALUE ( 'Bonus'[Bonus], 60 )
+MEASURE '_Measures'[Stress Completion %] =
+    DIVIDE ( SUM ( Stress_Summary[completed] ), SUM ( Stress_Summary[requests] ) )
+MEASURE '_Measures'[Stress Lost per Day] = DIVIDE ( SUM ( Stress_Summary[lost_no_partner] ), SUM ( Stress_Summary[days] ) )
+MEASURE '_Measures'[Stress Contribution per Day] = DIVIDE ( SUM ( Stress_Summary[contribution] ), SUM ( Stress_Summary[days] ) )
+MEASURE '_Measures'[Lost vs Normal Status Quo %] =
+    VAR n = CALCULATE ( DIVIDE ( SUM ( Stress_Summary[lost_no_partner] ), SUM ( Stress_Summary[days] ) ),
+                REMOVEFILTERS ( Stress_Summary ), REMOVEFILTERS ( Stress_Cases ),
+                Stress_Summary[scenario_code] = "normal:status_quo" )
+    RETURN DIVIDE ( [Stress Lost per Day] - n, n )
+MEASURE '_Measures'[Recovered by Profit %] =
+    DIVIDE ( SUM ( Stress_Cases[lost_status_quo] ) - SUM ( Stress_Cases[lost_profit] ), SUM ( Stress_Cases[lost_status_quo] ) )
+MEASURE '_Measures'[Recovered by Service %] =
+    DIVIDE ( SUM ( Stress_Cases[lost_status_quo] ) - SUM ( Stress_Cases[lost_service] ), SUM ( Stress_Cases[lost_status_quo] ) )
+MEASURE '_Measures'[Extra Jobs per Day from Incentive] =
+    SUMX ( Stress_Cases, DIVIDE ( Stress_Cases[lost_profit] - Stress_Cases[lost_incentive], Stress_Cases[days] ) )
+MEASURE '_Measures'[Break-even Bonus] =
+    DIVIDE ( SUM ( Stress_Cases[revenue_incentive] ) - SUM ( Stress_Cases[revenue_profit] ), SUM ( Stress_Cases[incentive_hours] ) )
+MEASURE '_Measures'[Incentive Net per Day at Bonus] =
+    VAR b = [Selected Bonus]
+    RETURN SUMX ( Stress_Cases,
+        DIVIDE ( Stress_Cases[revenue_incentive] - Stress_Cases[revenue_profit] - b * Stress_Cases[incentive_hours],
+                 Stress_Cases[days] ) )
+MEASURE '_Measures'[Stress Cases Paying at Bonus] =
+    VAR b = [Selected Bonus]
+    RETURN COUNTROWS ( FILTER ( Stress_Cases, [Break-even Bonus] >= b ) )
+MEASURE '_Measures'[Bonus Pays Colour] =
+    IF ( [Break-even Bonus] >= [Selected Bonus], "#34D399", "#F87171" )
+
+// ---------------------------------------------------------- 11 Map metric switch
+MEASURE '_Measures'[Map Value] =
+    SWITCH ( SELECTEDVALUE ( 'Map Metric'[Metric], "Jobs lost per day" ),
+        "Demand per day",                 [Demand per Day],
+        "Jobs lost per day",              [Lost Jobs per Day],
+        "Completion %",                   [Completion %],
+        "Partners idle %",                [Idle %],
+        "Pressure index (MPI)",           [MPI],
+        "Value of one more partner-hour", [Value of One More Two-Wheeler] )
+MEASURE '_Measures'[Map Title] =
+    "Bengaluru - " & SELECTEDVALUE ( 'Map Metric'[Metric], "Jobs lost per day" ) & " by zone"
+
+// ---------------------------------------------------------- 12 Narrative and playbook
+MEASURE '_Measures'[Headline Problem] =
+    "Partners sit idle " & FORMAT ( [Idle %], "0%" ) & " of their online time, yet "
+        & FORMAT ( 1 - [Ride Completion %], "0%" ) & " of ride requests are not completed."
+MEASURE '_Measures'[Headline Forecast] =
+    "A week-ahead forecast flags " & FORMAT ( [Flag Rate %], "0%" ) & " of zone-hours - and they hold "
+        & FORMAT ( [Lost Jobs Captured %], "0%" ) & " of the jobs later lost."
+MEASURE '_Measures'[Headline Optimizer] =
+    VAR lost = CALCULATE ( [Econ Lost Jobs vs SQ %], REMOVEFILTERS ( Dim_Scenario ), Dim_Scenario[scenario_code] = "optimizer_profit" )
+    VAR up = CALCULATE ( [Contribution Uplift per Day], REMOVEFILTERS ( Dim_Scenario ), Dim_Scenario[scenario_code] = "optimizer_profit" )
+    RETURN "Profit repositioning cuts lost jobs by " & FORMAT ( -lost, "0.0%" ) & " for "
+        & IF ( up >= 0, "+", "-" ) & UNICHAR ( 8377 ) & FORMAT ( ABS ( up ), "#,0" ) & " a day - a service lever, not a profit lever."
+MEASURE '_Measures'[Headline Incentives] =
+    VAR c = CALCULATE ( [Net Cost per Recovered Job], REMOVEFILTERS ( Dim_Scenario ), Dim_Scenario[scenario_code] = "incentive_60" )
+    VAR n = CALCULATE ( [Break-even Bonus], REMOVEFILTERS ( Stress_Cases ), Stress_Cases[stress_case] = "normal" )
+    VAR f = CALCULATE ( [Break-even Bonus], REMOVEFILTERS ( Stress_Cases ), Stress_Cases[stress_case] = "festival_evening" )
+    RETURN "Bonuses recover jobs at " & UNICHAR ( 8377 ) & FORMAT ( c, "0" ) & " each; they pay only below "
+        & UNICHAR ( 8377 ) & FORMAT ( n, "0" ) & "/hour on a normal day, " & UNICHAR ( 8377 ) & FORMAT ( f, "0" ) & " on festival evenings."
+MEASURE '_Measures'[Zone Headline] =
+    SELECTEDVALUE ( Dim_Zone[zone_label] ) & " loses " & FORMAT ( [Lost Jobs per Day], "#,0" )
+        & " jobs a day; " & FORMAT ( [Reposition-Ahead Share of Lost %], "0%" )
+        & " could be fixed by moving partners in time."
+MEASURE '_Measures'[Zone Playbook] =
+    VAR ahead = [Reposition-Ahead Share of Lost %]
+    VAR city  = [Citywide Share of Lost %]
+    VAR rec   = CALCULATE ( [Jobs Recovered %], REMOVEFILTERS ( Dim_Scenario ), Dim_Scenario[scenario_code] = "optimizer_profit" )
+    VAR rec_s = CALCULATE ( [Jobs Recovered %], REMOVEFILTERS ( Dim_Scenario ), Dim_Scenario[scenario_code] = "optimizer_service" )
+    RETURN SWITCH ( TRUE (),
+        ISBLANK ( [Pressure Lost Jobs] ),     BLANK (),
+        rec >= 0.20,                          "Pre-position partners before the peak",
+        // timing problem the profit policy skips, but the service setting does fix
+        ahead >= 0.50 && rec < 0.05 && rec_s >= 0.10, "Service setting: profit policy skips this zone",
+        // neither repositioning policy fixes it (KIA is also beyond 20-minute reach)
+        ahead >= 0.50 && rec < 0.05,          "Repositioning cannot fix it: station dedicated supply",
+        city >= 0.30,                         "Add partners: targeted bonus on rain and festival days",
+        "Repositioning plus same-hour dispatch" )
+MEASURE '_Measures'[Playbook Colour] =
+    SWITCH ( [Zone Playbook],
+        "Pre-position partners before the peak",                  "#2DD4BF",
+        "Service setting: profit policy skips this zone",         "#FB923C",
+        "Repositioning cannot fix it: station dedicated supply",       "#F87171",
+        "Add partners: targeted bonus on rain and festival days", "#818CF8",
+        "Repositioning plus same-hour dispatch",                  "#FBBF24",
+        "#334155" )
+MEASURE '_Measures'[Scenario Colour] = SELECTEDVALUE ( Dim_Scenario[colour], "#94A3B8" )
+MEASURE '_Measures'[Ladder Profit Uplift per Day] =
+    CALCULATE ( [Contribution Uplift per Day], REMOVEFILTERS ( Dim_Scenario ), Dim_Scenario[scenario_code] = "optimizer_profit" )
+MEASURE '_Measures'[Ladder Service Cost per Job] =
+    CALCULATE ( [Net Cost per Recovered Job], REMOVEFILTERS ( Dim_Scenario ), Dim_Scenario[scenario_code] = "optimizer_service" )
+MEASURE '_Measures'[Ladder Bonus Cost per Job] =
+    CALCULATE ( [Net Cost per Recovered Job], REMOVEFILTERS ( Dim_Scenario ), Dim_Scenario[scenario_code] = "incentive_60" )
+
+// =========================================================================
+// Checks: same order, names and units as 01_dashboard_checks.sql Result Set A
+// (percentages x 100 so they compare directly with the SQL output)
+// =========================================================================
+EVALUATE
+UNION (
+    ROW ( "No", 1,  "Check measure", "Demand",                                  "DAX value", ROUND ( [Demand], 2 ) ),
+    ROW ( "No", 2,  "Check measure", "Completed Jobs",                          "DAX value", ROUND ( [Completed Jobs], 2 ) ),
+    ROW ( "No", 3,  "Check measure", "Completion %",                            "DAX value", ROUND ( 100 * [Completion %], 2 ) ),
+    ROW ( "No", 4,  "Check measure", "Ride Completion %",                       "DAX value", ROUND ( 100 * [Ride Completion %], 2 ) ),
+    ROW ( "No", 5,  "Check measure", "Food Delivered %",                        "DAX value", ROUND ( 100 * [Food Delivered %], 2 ) ),
+    ROW ( "No", 6,  "Check measure", "Lost to No Partner %",                    "DAX value", ROUND ( 100 * [Lost to No Partner %], 2 ) ),
+    ROW ( "No", 7,  "Check measure", "Platform Revenue",                        "DAX value", ROUND ( [Platform Revenue], 2 ) ),
+    ROW ( "No", 8,  "Check measure", "Revenue per Completed Job",               "DAX value", ROUND ( [Revenue per Completed Job], 2 ) ),
+    ROW ( "No", 9,  "Check measure", "Demand per Day",                          "DAX value", ROUND ( [Demand per Day], 2 ) ),
+    ROW ( "No", 10, "Check measure", "Online Partner-Hours",                    "DAX value", ROUND ( [Online Partner-Hours], 2 ) ),
+    ROW ( "No", 11, "Check measure", "Utilization %",                           "DAX value", ROUND ( 100 * [Utilization %], 2 ) ),
+    ROW ( "No", 12, "Check measure", "Idle %",                                  "DAX value", ROUND ( 100 * [Idle %], 2 ) ),
+    ROW ( "No", 13, "Check measure", "Empty km per Busy Hour",                  "DAX value", ROUND ( [Empty km per Busy Hour], 2 ) ),
+    ROW ( "No", 14, "Check measure", "Under-supplied Zone-Hours %",             "DAX value", ROUND ( 100 * [Under-supplied Zone-Hours %], 2 ) ),
+    ROW ( "No", 15, "Check measure", "Reposition-Ahead Share of Lost %",        "DAX value", ROUND ( 100 * [Reposition-Ahead Share of Lost %], 2 ) ),
+    ROW ( "No", 16, "Check measure", "Citywide Share of Lost %",                "DAX value", ROUND ( 100 * [Citywide Share of Lost %], 2 ) ),
+    ROW ( "No", 17, "Check measure", "WAPE % (GBM + rain)",                     "DAX value",
+          ROUND ( 100 * CALCULATE ( [WAPE %], Dim_Forecast_Model[model_name] = "GBM + rain" ), 2 ) ),
+    ROW ( "No", 18, "Check measure", "Skill vs Seasonal Naive % (GBM + rain)",  "DAX value",
+          ROUND ( 100 * CALCULATE ( [Skill vs Seasonal Naive %], Dim_Forecast_Model[model_name] = "GBM + rain" ), 2 ) ),
+    ROW ( "No", 19, "Check measure", "Flag Rate %",                             "DAX value", ROUND ( 100 * [Flag Rate %], 2 ) ),
+    ROW ( "No", 20, "Check measure", "Lost Jobs Captured %",                    "DAX value", ROUND ( 100 * [Lost Jobs Captured %], 2 ) ),
+    ROW ( "No", 21, "Check measure", "Scenario Lost Jobs (status quo)",         "DAX value", ROUND ( [Status Quo Lost Jobs], 2 ) ),
+    ROW ( "No", 22, "Check measure", "Lost Jobs Change vs SQ % (profit)",       "DAX value",
+          ROUND ( 100 * CALCULATE ( [Lost Jobs vs Status Quo %], Dim_Scenario[scenario_code] = "optimizer_profit" ), 2 ) ),
+    ROW ( "No", 23, "Check measure", "Contribution Change vs SQ % (profit)",    "DAX value",
+          ROUND ( 100 * CALCULATE ( [Contribution Change vs SQ %], Dim_Scenario[scenario_code] = "optimizer_profit" ), 2 ) ),
+    ROW ( "No", 24, "Check measure", "Contribution Uplift per Day (profit)",    "DAX value",
+          ROUND ( CALCULATE ( [Contribution Uplift per Day], Dim_Scenario[scenario_code] = "optimizer_profit" ), 2 ) ),
+    ROW ( "No", 25, "Check measure", "Moves per Day (profit)",                  "DAX value",
+          ROUND ( CALCULATE ( [Moves per Day], Dim_Scenario[scenario_code] = "optimizer_profit" ), 2 ) ),
+    ROW ( "No", 26, "Check measure", "Break-even Job Value (service vs profit)", "DAX value",
+          ROUND ( CALCULATE ( [Break-even Job Value], Dim_Scenario[scenario_code] = "optimizer_service" ), 2 ) ),
+    ROW ( "No", 27, "Check measure", "Net vs Profit per Day (INR 60 bonus)",    "DAX value",
+          ROUND ( CALCULATE ( [Net vs Profit per Day], Dim_Scenario[scenario_code] = "incentive_60" ), 2 ) ),
+    ROW ( "No", 28, "Check measure", "Net Cost per Recovered Job (INR 60 bonus)", "DAX value",
+          ROUND ( CALCULATE ( [Net Cost per Recovered Job], Dim_Scenario[scenario_code] = "incentive_60" ), 2 ) ),
+    ROW ( "No", 29, "Check measure", "Break-even Bonus (normal day)",           "DAX value",
+          ROUND ( CALCULATE ( [Break-even Bonus], Stress_Cases[stress_case] = "normal" ), 2 ) ),
+    ROW ( "No", 30, "Check measure", "Break-even Bonus (festival evening)",     "DAX value",
+          ROUND ( CALCULATE ( [Break-even Bonus], Stress_Cases[stress_case] = "festival_evening" ), 2 ) )
+)
+ORDER BY [No]

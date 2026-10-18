@@ -28,7 +28,7 @@ go, when, and for which service — and whether it is economically justified.
 | Phase 9 | Forecasting: week-ahead demand, supply and pressure | ✅ |
 | Phase 10 | City-scale repositioning optimization, tested fairly against the status quo | ✅ |
 | Phase 11 | Incentive economics and stress scenarios | ✅ |
-| Phase 12 | Power BI executive dashboard | Next |
+| Phase 12 | Power BI command center: SQL semantic layer, 146 DAX measures proved against SQL, 10 interactive pages | In progress |
 
 Stages 0–5 built and validated the optimizer core and the synthetic city; they
 correspond to the early part of Phases 3 and 10.
@@ -49,6 +49,7 @@ Every result table is generated from data by a report script — never typed by 
 | `09_Forecasting/01_…04_*.md` | Forecast approach, demand and supply accuracy vs benchmark and noise floor, week-ahead shortage prediction | `python scripts/report_phase9.py` |
 | `10_Optimization/01_…05_*.md` | City optimizer design, policy comparison with 95% ranges, where gains come from, repositioning, value of supply | `python scripts/tune_policy.py`, then `python scripts/report_phase10.py` |
 | `11_Incentive_Economics/01_…03_*.md` | Incentive design, whether incentives pay, cost-per-job lever ladder, stress scenarios | `python scripts/report_phase11.py` |
+| `12_PowerBI/01_…02_*.md` | Power BI model (row counts), measure catalogue, 30 DAX-vs-SQL checks, scenario reconciliation | `python scripts/report_phase12.py` |
 
 ## Key findings (synthetic Bengaluru, holdout weeks)
 
@@ -88,13 +89,13 @@ Data generation: `03_Data_Engineering/Data_Generation_Framework.md`
 ```bash
 pip install -r requirements-lock.txt   # exact tested versions (or requirements.txt)
 pip install -e .
-pytest                                 # 105 tests
+pytest                                 # 117 tests
 python scripts/run_toy.py              # toy optimizer
 python scripts/compare_policies.py     # optimizer vs baseline
 python scripts/bottlenecks.py          # marginal value of supply
 python scripts/build_all.py            # rebuild all Bengaluru data (~2-4 min)
 python scripts/load_warehouse.py       # load SQL Server warehouse PULSE_DW
-python scripts/report_phase5.py        # ... then report_phase6 to report_phase11 in order
+python scripts/report_phase5.py        # ... then report_phase6 to report_phase12 in order
 ```
 
 Each `report_phaseN.py` reads the warehouse, rebuilds that phase's tables,
