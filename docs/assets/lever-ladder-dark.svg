@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="404" viewBox="0 0 1280 404" role="img" aria-label="Lever ladder: jobs won back and cost per extra job" font-family="Segoe UI, -apple-system, Helvetica Neue, Arial, sans-serif">
+<title>Lever ladder: jobs won back and cost per extra job</title>
+<rect width="1280" height="404" rx="16" fill="#111A2B" stroke="#1F2A3D"/>
+<text x="40" y="48" font-size="28" fill="#F1F5F9" font-weight="700" text-anchor="start" >The lever ladder</text>
+<text x="40" y="74" font-size="17" fill="#94A3B8" font-weight="400" text-anchor="start" >Ordered by price per extra job served: pull the cheapest lever first.</text>
+<text x="300" y="114" font-size="16" fill="#94A3B8" font-weight="600" text-anchor="start" >Lost jobs won back vs status quo</text>
+<text x="800" y="114" font-size="16" fill="#94A3B8" font-weight="600" text-anchor="start" >Net cost per extra job served (₹)</text>
+<text x="40" y="153" font-size="18" fill="#F1F5F9" font-weight="600" text-anchor="start" >Profit repositioning</text>
+<rect x="300" y="136" width="94.5" height="22" rx="4" fill="#2DD4BF"/>
+<text x="405" y="153" font-size="17" fill="#F1F5F9" font-weight="600" text-anchor="start" >13.0%</text>
+<line x1="800" y1="136" x2="800" y2="158" stroke="#64748B" stroke-width="2"/>
+<text x="812" y="153" font-size="17" fill="#F1F5F9" font-weight="600" text-anchor="start" >free: +₹205 a day</text>
+<text x="40" y="203" font-size="18" fill="#F1F5F9" font-weight="600" text-anchor="start" >Service repositioning</text>
+<line x1="40" y1="172" x2="1240" y2="172" stroke="#1F2A3D"/>
+<rect x="300" y="186" width="173.8" height="22" rx="4" fill="#2DD4BF"/>
+<text x="484" y="203" font-size="17" fill="#F1F5F9" font-weight="600" text-anchor="start" >23.9%</text>
+<rect x="800" y="186" width="112.0" height="22" rx="4" fill="#FBBF24"/>
+<text x="922" y="203" font-size="17" fill="#F1F5F9" font-weight="600" text-anchor="start" >₹16.8</text>
+<text x="40" y="253" font-size="18" fill="#F1F5F9" font-weight="600" text-anchor="start" >Profit + ₹60 bonus</text>
+<line x1="40" y1="222" x2="1240" y2="222" stroke="#1F2A3D"/>
+<rect x="300" y="236" width="293.1" height="22" rx="4" fill="#2DD4BF"/>
+<text x="603" y="253" font-size="17" fill="#F1F5F9" font-weight="600" text-anchor="start" >40.3%</text>
+<rect x="800" y="236" width="287.3" height="22" rx="4" fill="#FBBF24"/>
+<text x="1097" y="253" font-size="17" fill="#F1F5F9" font-weight="600" text-anchor="start" >₹43</text>
+<text x="40" y="303" font-size="18" fill="#F1F5F9" font-weight="600" text-anchor="start" >Profit + ₹40 bonus</text>
+<line x1="40" y1="272" x2="1240" y2="272" stroke="#1F2A3D"/>
+<rect x="300" y="286" width="360.0" height="22" rx="4" fill="#2DD4BF"/>
+<text x="670" y="303" font-size="17" fill="#F1F5F9" font-weight="600" text-anchor="start" >49.5%</text>
+<rect x="800" y="286" width="328.0" height="22" rx="4" fill="#FBBF24"/>
+<text x="1138" y="303" font-size="17" fill="#F1F5F9" font-weight="600" text-anchor="start" >₹49</text>
+<text x="40" y="353" font-size="18" fill="#F1F5F9" font-weight="600" text-anchor="start" >Profit + ₹80 bonus</text>
+<line x1="40" y1="322" x2="1240" y2="322" stroke="#1F2A3D"/>
+<rect x="300" y="336" width="248.0" height="22" rx="4" fill="#2DD4BF"/>
+<text x="558" y="353" font-size="17" fill="#F1F5F9" font-weight="600" text-anchor="start" >34.1%</text>
+<rect x="800" y="336" width="368.0" height="22" rx="4" fill="#FBBF24"/>
+<text x="1178" y="353" font-size="17" fill="#F1F5F9" font-weight="600" text-anchor="start" >₹55</text>
+<text x="40" y="384" font-size="14" fill="#64748B" font-weight="400" text-anchor="start" >Holdout weeks 13–16, every lever replayed on the same customers. Costs are against the profit policy. Model-based estimates on a synthetic city.</text>
+</svg>

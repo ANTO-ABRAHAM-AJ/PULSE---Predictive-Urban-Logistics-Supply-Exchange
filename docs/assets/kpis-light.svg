@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="206" viewBox="0 0 1280 206" role="img" aria-label="PULSE headline results" font-family="Segoe UI, -apple-system, Helvetica Neue, Arial, sans-serif">
+<title>PULSE headline results</title>
+<rect x="14.0" y="10" width="408.0" height="3" rx="1.5" fill="#DC2626"/>
+<text x="14" y="36" font-size="15" fill="#DC2626" font-weight="700" text-anchor="start" letter-spacing="2">DIAGNOSE</text>
+<rect x="436.0" y="10" width="197.0" height="3" rx="1.5" fill="#D97706"/>
+<text x="436" y="36" font-size="15" fill="#D97706" font-weight="700" text-anchor="start" letter-spacing="2">PREDICT</text>
+<rect x="647.0" y="10" width="619.0" height="3" rx="1.5" fill="#0D9488"/>
+<text x="647" y="36" font-size="15" fill="#0D9488" font-weight="700" text-anchor="start" letter-spacing="2">DECIDE</text>
+<rect x="14.0" y="50" width="197.0" height="146" rx="12" fill="#FFFFFF" stroke="#E2E8F0"/>
+<rect x="14.0" y="50" width="5" height="146" rx="2.5" fill="#DC2626"/>
+<text x="36" y="110" font-size="44" fill="#0F172A" font-weight="700" text-anchor="start" >935</text>
+<text x="36" y="146" font-size="17" fill="#0F172A" font-weight="600" text-anchor="start" >jobs lost a day</text>
+<text x="36" y="174" font-size="14" fill="#475569" font-weight="400" text-anchor="start" >no partner in 20 minutes</text>
+<rect x="225.0" y="50" width="197.0" height="146" rx="12" fill="#FFFFFF" stroke="#E2E8F0"/>
+<rect x="225.0" y="50" width="5" height="146" rx="2.5" fill="#DC2626"/>
+<text x="247" y="110" font-size="44" fill="#0F172A" font-weight="700" text-anchor="start" >52.8%</text>
+<text x="247" y="146" font-size="17" fill="#0F172A" font-weight="600" text-anchor="start" >of partner time idle</text>
+<text x="247" y="174" font-size="14" fill="#475569" font-weight="400" text-anchor="start" >while those jobs are lost</text>
+<rect x="436.0" y="50" width="197.0" height="146" rx="12" fill="#FFFFFF" stroke="#E2E8F0"/>
+<rect x="436.0" y="50" width="5" height="146" rx="2.5" fill="#D97706"/>
+<text x="458" y="110" font-size="44" fill="#0F172A" font-weight="700" text-anchor="start" >91%</text>
+<text x="458" y="146" font-size="17" fill="#0F172A" font-weight="600" text-anchor="start" >of lost jobs flagged</text>
+<text x="458" y="174" font-size="14" fill="#475569" font-weight="400" text-anchor="start" >a week ahead</text>
+<rect x="647.0" y="50" width="197.0" height="146" rx="12" fill="#FFFFFF" stroke="#E2E8F0"/>
+<rect x="647.0" y="50" width="5" height="146" rx="2.5" fill="#0D9488"/>
+<text x="669" y="110" font-size="44" fill="#0F172A" font-weight="700" text-anchor="start" >−13%</text>
+<text x="669" y="146" font-size="17" fill="#0F172A" font-weight="600" text-anchor="start" >lost jobs, at no cost</text>
+<text x="669" y="174" font-size="14" fill="#475569" font-weight="400" text-anchor="start" >profit repositioning</text>
+<rect x="858.0" y="50" width="197.0" height="146" rx="12" fill="#FFFFFF" stroke="#E2E8F0"/>
+<rect x="858.0" y="50" width="5" height="146" rx="2.5" fill="#0D9488"/>
+<text x="880" y="110" font-size="44" fill="#0F172A" font-weight="700" text-anchor="start" >₹19.5</text>
+<text x="880" y="146" font-size="17" fill="#0F172A" font-weight="600" text-anchor="start" >break-even per job</text>
+<text x="880" y="174" font-size="14" fill="#475569" font-weight="400" text-anchor="start" >service wins above it</text>
+<rect x="1069.0" y="50" width="197.0" height="146" rx="12" fill="#FFFFFF" stroke="#E2E8F0"/>
+<rect x="1069.0" y="50" width="5" height="146" rx="2.5" fill="#0D9488"/>
+<text x="1091" y="110" font-size="44" fill="#0F172A" font-weight="700" text-anchor="start" >₹43–55</text>
+<text x="1091" y="146" font-size="17" fill="#0F172A" font-weight="600" text-anchor="start" >per job via bonuses</text>
+<text x="1091" y="174" font-size="14" fill="#475569" font-weight="400" text-anchor="start" >vs ₹17 repositioning</text>
+</svg>

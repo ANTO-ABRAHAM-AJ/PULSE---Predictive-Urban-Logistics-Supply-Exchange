@@ -36,3 +36,4 @@ SQL Server and `PULSE_DW` (`config/warehouse.yaml`).
 | `report_phase10.py` | Simulate the policies on the holdout weeks and report |
 | `report_phase11.py` | Incentive programmes and stress scenarios |
 | `report_phase12.py` | Power BI semantic layer, map file and DAX-vs-SQL checks |
+| `build_readme_assets.py` | Front-page graphics in `docs/assets/` |
