@@ -13,7 +13,7 @@ go, when, and for which service — and whether it is economically justified.
 
 | Stage / Phase | What | Status |
 |---------------|------|--------|
-| Phase 1 | Business understanding: assumptions log and KPI dictionary (narrative documents written last) | Partial |
+| Phase 1 | Business understanding: problem statement, operating model, glossary, assumptions log, KPI dictionary | ✅ |
 | Phase 2 | Marketplace data ecosystem: entities, lifecycles, lineage, coverage | ✅ |
 | 0–1 | Repo setup; toy optimization model validated against a hand calculation | ✅ |
 | 2 | Optimizer stress tests (no supply, spikes, infeasible service floors, …) | ✅ |
