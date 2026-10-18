@@ -1,5 +1,8 @@
 # Phase 4 — Enterprise Data Warehouse (`PULSE_DW`)
 
+**Question answered:** *Can all marketplace data live in one trusted place,
+where every number reconciles with the generator?*
+
 SQL Server 2025 (Developer), schema `dw`. Star schema at **Zone × Time × Service**
 grain, loaded from the synthetic Bengaluru dataset.
 

@@ -119,6 +119,8 @@ The same 30 rows from DAX query view (step 6.4):
 
 ![Dashboard checks in DAX](./images/02_dax_checks.png)
 
+![Dashboard checks in DAX, continued](./images/02_dax_checks_2.png)
+
 ---
 
 ## 8. Result Set B — Scenario Economics in the Power BI Layer

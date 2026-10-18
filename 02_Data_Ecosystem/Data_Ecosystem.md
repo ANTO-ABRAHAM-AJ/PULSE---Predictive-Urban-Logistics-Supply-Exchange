@@ -46,9 +46,9 @@ record is placed in a zone and an hour.
 | Food order | One food order, whatever its outcome | `order_key` | `Fact_Food_Orders` | 621,451 |
 | Order milestone | One step in a food order's life | `delivery_event_key` | `Fact_Delivery_Events` | ~3.0M |
 | Partner-hour | One partner online for one hour: location, busy and idle time | `availability_key` | `Fact_Driver_Availability` | 642,456 |
-| Supply allocation | An optimizer decision to move partners between zones | `allocation_key` | `Fact_Supply_Allocation` | 0 (Phase 10) |
-| Repositioning move | One partner's simulated move between zones | `repositioning_key` | `Fact_Repositioning` | 0 (Phase 10) |
-| Incentive | A payment to bring supply online in a zone and hour | `incentive_key` | `Fact_Incentives` | 0 (Phase 11) |
+| Supply allocation | An optimizer decision to move partners between zones | `allocation_key` | `Fact_Supply_Allocation` | Filled by the Phase 10 replay (every scenario) |
+| Repositioning move | One partner's simulated move between zones | `repositioning_key` | `Fact_Repositioning` | Filled by the Phase 10 replay (every simulated move) |
+| Incentive | A payment to bring supply online in a zone and hour | `incentive_key` | `Fact_Incentives` | Filled by the Phase 11 incentive programmes |
 
 Row counts are for the default dataset; current figures are generated in
 `04_Data_Warehouse/Load_Results.md`.
@@ -210,8 +210,8 @@ flowchart LR
 | Driver availability | ✅ Captured | `Fact_Driver_Availability` |
 | Service eligibility | ✅ Captured | `Dim_Vehicle` |
 | Assignments | ✅ Captured | `assigned_ts` and `driver_key` on every served job |
-| Incentives | ⏳ Phase 11 | table exists, empty in status-quo history |
-| Repositioning | ⏳ Phase 10 | table exists, empty in status-quo history |
+| Incentives | ✅ Captured (Phase 11) | `Fact_Incentives`: bonus partner-hours and cost per scenario, zone and hour; empty in status-quo history by design |
+| Repositioning | ✅ Captured (Phase 10) | `Fact_Repositioning`: every simulated move per scenario; empty in status-quo history by design |
 
 ---
 
@@ -232,6 +232,6 @@ flowchart LR
 The PULSE data ecosystem captures every entity and event needed to answer the
 marketplace's operational question at **Zone × Time × Service** grain: who
 asked for what, where and when; whether a partner served it and how fast; what
-it earned; and where partners were and how busy. The three Phase 10–11 tables
-are in place and empty by design. The remaining gaps are deliberate
+it earned; and where partners were and how busy. The three policy tables were
+created empty in Phase 4 and filled by the Phase 10–11 simulations. The remaining gaps are deliberate
 simplifications that do not affect allocation decisions.

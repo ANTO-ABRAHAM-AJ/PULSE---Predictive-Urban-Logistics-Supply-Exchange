@@ -1,7 +1,7 @@
 # Phase 2 — Marketplace Data Ecosystem
 
-What data the PULSE marketplace has, how it fits together, and where each
-piece lives.
+**Question answered:** *What data does the marketplace produce, how does it fit
+together, and where does each piece live?*
 
 - **`Data_Ecosystem.md`** — entity and event catalogue, lifecycles,
   relationships, data lineage, and coverage against the locked plan

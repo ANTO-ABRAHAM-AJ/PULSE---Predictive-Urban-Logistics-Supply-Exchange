@@ -1,6 +1,6 @@
 # PULSE — KPI Dictionary
 
-**Status:** v0.1 — the single source of truth for every metric.
+**Status:** final (v1.0) — the single source of truth for every metric. Implemented in SQL (Phases 5–11), reproduced in Python, and proved in Power BI DAX (Phase 12: 30 measures match SQL to two decimals).
 
 **Rules**
 1. Each KPI is implemented **once**, as a T-SQL view (Phase 5). Power BI DAX

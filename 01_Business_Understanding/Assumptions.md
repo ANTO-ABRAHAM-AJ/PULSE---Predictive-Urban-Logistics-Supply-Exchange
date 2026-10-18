@@ -1,7 +1,8 @@
 # PULSE — Assumptions Log
 
-**Status:** v0.5 — written before the data generator (Stage 5). Every rule the
-synthetic city follows is listed here. Numeric values live in `config/`;
+**Status:** final (v1.0). Written before the data generator and extended in
+Phases 10–11 (O-08, O-09, E-04 to E-08). Every rule the synthetic city follows
+is listed here. Numeric values live in `config/`;
 this file explains *why* each value exists and where it is used.
 
 **How to use this file**
@@ -51,7 +52,7 @@ Zone list (24 zones; ids and approximate centroids in `config/bengaluru/zones.ya
 | ID | Assumption | Rationale |
 |----|-----------|-----------|
 | T-01 | Planning period = **1 hour**. | Matches the LP and forecasting grain. |
-| T-02 | Simulation horizon = **12 weeks** of history + held-out weeks for testing. | Enough weekly cycles for forecasting backtests. |
+| T-02 | Simulation horizon = **16 weeks**: 12 weeks of history (weeks 1–8 to learn, 9–12 to validate and tune) + 4 holdout weeks (13–16) simulated once for the final results. | Enough weekly cycles for forecasting backtests, and a clean test set. |
 | T-03 | Demand exists 24 hours but is near zero 01:00–06:00. | Keeps the time dimension complete for SQL and Power BI. |
 
 ## 4. Demand rules (the patterns the analytics must later rediscover)
