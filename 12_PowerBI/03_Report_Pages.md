@@ -29,21 +29,6 @@ tooltips, bookmarks) is in `04_Interactivity.md`.
 Canvas 16:9, custom size larger than 1280 × 720 (the same size on every page). Theme: **View → Themes → Browse for themes →**
 `theme/PULSE_Command_Center.json`.
 
-```
-┌──────────┬──────────────────────────────────────────────────────────────┐
-│  PULSE   │  Page title          slicers / sliders      ⟲ Reset (p. 7, 9)│  header
-│ Command  ├──────────────────────────────────────────────────────────────┤
-│ Center   │                                                              │
-│          │                    page content                              │
-│ ▸ pages  │                                                              │
-│ (page    │                                                              │
-│ navigator│                                                              │
-│  button) │                                                              │
-├──────────┴──────────────────────────────────────────────────────────────┤
-│ Synthetic Bengaluru · model-based estimates · ward map CC BY-SA 2.5 IN   │  footer
-└─────────────────────────────────────────────────────────────────────────┘
-```
-
 | Element | How |
 |---|---|
 | Left rail | Rectangle, fill `#0F1724`, full height |
@@ -60,25 +45,14 @@ under the value, rounded corners 10 px (from the theme).
 
 ## Page 1 — Command Center
 
+![Page 1 — Command Center](images/pages/01_command_center.png)
+
 **Question:** What is the state of the marketplace, in four sentences?
 **Window:** all 16 weeks (cards, map), holdout (policy headline).
 
-```
-┌───────┬───────┬───────┬───────┬───────┐
-│ card  │ card  │ card  │ card  │ card  │   y 80-170
-├───────┴───────┴──────┬┴───────┴───────┤
-│                      │ Finding 1   →  │
-│   Bengaluru map      │ Finding 2   →  │   y 180-560
-│   jobs lost per day  │ Finding 3   →  │
-│                      │ Finding 4   →  │
-├──────────────────────┴────────────────┤
-│ jobs per day by hour: completed vs lost (both services)                 │   y 570-690
-└───────────────────────────────────────┘
-```
-
 | Visual | Fields | Settings |
 |---|---|---|
-| Card (new), 5 cards in one visual | `[Demand per Day]` "Jobs per day"; `[Ride Completion %]` "Rides completed" with reference label `[Food Delivered %]` "Food delivered"; `[Idle %]` "Partner time idle"; `[Lost Jobs per Day]` "Jobs lost to no partner, per day"; `[Revenue per Day]` "Platform revenue per day" | Expected over 16 weeks: 9,811 · 71.9% (food 93.7%) · 52.8% · about 940 · about ₹337k |
+| Card (new), 5 cards in one visual | `[Demand per Day]` "Jobs per day"; `[Ride Completion %]` "Rides completed" with reference label `[Food Delivered %]` "Food delivered"; `[Idle %]` "Partner time idle"; `[Lost Jobs per Day]` "Jobs lost to no partner, per day"; `[Revenue per Day]` "Platform revenue per day" | Expected over 16 weeks: 9,811 · 71.9% (food 93.7%) · 52.8% · 935 · ₹3,37,205 |
 | Shape map | Location `Dim_Zone[zone_code]`; Color saturation `[Lost Jobs per Day]`; Tooltips `[Lost Jobs per Day]`, `[Completion %]`, `[MPI]`, `[Zone Playbook]` | Map `map/bengaluru_zones.json`; colours min `#1E293B`, max `#F87171`; drillthrough to Zone Detail |
 | 4 × Card (new) with text | `[Headline Problem]`, `[Headline Forecast]`, `[Headline Optimizer]`, `[Headline Incentives]` | Callout 12 pt, left aligned, word wrap |
 | Line and stacked column chart | X `Dim_Time[hour_label]`; columns `[Completed per Day]`, line `[Lost Jobs per Day]` | Column colour `#2DD4BF`, line `#F87171`, secondary axis on; title "A day in Bengaluru: jobs completed vs lost, per hour" |
@@ -91,6 +65,8 @@ found and lead to the page that proves it.
 ---
 
 ## Page 2 — Marketplace Performance
+
+![Page 2 — Marketplace Performance](images/pages/02_marketplace_performance.png)
 
 **Question:** Which services, zones and hours fail customers? **Window:** 16 weeks.
 
@@ -109,6 +85,8 @@ in three clicks.
 ---
 
 ## Page 3 — Demand Map
+
+![Page 3 — Demand Map](images/pages/03_demand_map.png)
 
 **Question:** Where and when does demand arrive? **Window:** 16 weeks.
 
@@ -129,6 +107,8 @@ idle supply or pressure on the same map.
 
 ## Page 4 — Supply & Idle Partners
 
+![Page 4 — Supply & Idle Partners](images/pages/04_supply_idle_partners.png)
+
 **Question:** Where are partners, and why are they idle? **Window:** 16 weeks.
 
 | Visual | Fields | Settings |
@@ -146,6 +126,8 @@ problem is *where* supply is, not how much exists.
 ---
 
 ## Page 5 — Pressure Index
+
+![Page 5 — Pressure Index](images/pages/05_pressure_index.png)
 
 **Question:** Where is demand above supply, and what kind of shortage is it?
 **Window:** 16 weeks.
@@ -168,6 +150,8 @@ transit hubs crossing the shortage line at the commute peaks.
 
 ## Page 6 — Forecast & Early Warning
 
+![Page 6 — Forecast & Early Warning](images/pages/06_forecast_early_warning.png)
+
 **Question:** Can we see shortages a week ahead? **Window:** holdout weeks 13–16.
 
 | Visual | Fields | Settings |
@@ -186,20 +170,10 @@ later lost, so a planner can act a week early on a short list.
 
 ## Page 7 — Policy Simulator
 
+![Page 7 — Policy Simulator](images/pages/07_policy_simulator.png)
+
 **Question:** Which policy wins, and at what value of a customer?
 **Window:** holdout weeks 13–16, all scenarios replay the same customers.
-
-```
-┌────────────────────────────┬──────────────────────────┐
-│ Job value slider  ₹20      │ BEST LEVER AT ₹20:       │
-│ ───────●────────────────   │ Optimizer (service)      │
-├────────────────────────────┴──────────────────────────┤
-│ value-adjusted gain per day vs job value (one line    │
-│ per policy; crossings = break-even)                   │
-├──────────────────────────┬────────────────────────────┤
-│ scenario scorecard table │ jobs recovered % by zone   │
-└──────────────────────────┴────────────────────────────┘
-```
 
 | Visual | Fields | Settings |
 |---|---|---|
@@ -220,6 +194,8 @@ business input, not a modelling argument.
 
 ## Page 8 — Repositioning Flows
 
+![Page 8 — Repositioning Flows](images/pages/08_repositioning_flows.png)
+
 **Question:** Who moves where, and what is one more partner worth?
 **Window:** holdout weeks 13–16.
 
@@ -238,6 +214,8 @@ where a partner is worth most, which is what Phase 11 used to target bonuses.
 ---
 
 ## Page 9 — Incentives & Stress Tests
+
+![Page 9 — Incentives & Stress Tests](images/pages/09_incentives_stress_tests.png)
 
 **Question:** When does paying partners pay? **Window:** holdout; stress tests 14 days.
 
@@ -258,6 +236,8 @@ programmes at ₹40–80 do not pay: use bonuses as a surge tool.
 ---
 
 ## Page 10 — Decision Playbook
+
+![Page 10 — Decision Playbook](images/pages/10_decision_playbook.png)
 
 **Question:** What should each zone do on Monday?
 
@@ -294,6 +274,8 @@ holdout weeks; partners assumed to follow every move.
 
 ## Zone Detail — drillthrough page (hidden)
 
+![Zone Detail — drillthrough page (hidden)](images/pages/11_zone_detail.png)
+
 **Drillthrough field:** `Dim_Zone[zone_label]` (keep all filters on). Page type
 **Drillthrough**; Power BI adds the back button automatically.
 
@@ -311,6 +293,8 @@ Right-click any zone in a map, matrix, table or bar → **Drill through → Zone
 ---
 
 ## Tooltips (built-in)
+
+![Tooltips (built-in)](images/pages/12_zone_tooltip.png)
 
 A report-page tooltip (320 × 240) was tried and dropped: it was cramped and the
 Shape Map ignores it. Each zone visual instead carries **tooltip fields**:
